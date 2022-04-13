@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "esbenp.prettier-vscode",               //makes your code pretty
+        "ms-python.python",                     //Python
+        "batisteo.vscode-django",               //Django
+        "xabikos.JavaScriptSnippets",           //JavaScript
+        "dsznajder.es7-react-js-snippets",      //React
+    ]
+}
