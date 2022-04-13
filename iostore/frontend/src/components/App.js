@@ -6,7 +6,7 @@ export default class App extends React.Component {
         super(props);
     }
     render() {
-        return <h1>The Fu**ing Sorcerers</h1>;
+        return <h1>The Fu**ing Sourcerers</h1>;
     }
 }
 
