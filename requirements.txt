@@ -1,12 +1,10 @@
 # Backend framework
 # Docs: https://docs.djangoproject.com/en/4.0/contents/
 django == 4.0.*
-djangorestframework
-#django-rest-knox # from `Traversy Media`
 
 # Allowing working with images
 # Docs: https://pillow.readthedocs.io/en/stable/
-Pillow == 9.1.*
+Pillow >= 9.1
 
 # Allow to format Python file automatically
 # Docs: https://pypi.org/project/autopep8/

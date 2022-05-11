@@ -4,6 +4,6 @@
         "ms-python.python",                     //Python
         "batisteo.vscode-django",               //Django
         "xabikos.JavaScriptSnippets",           //JavaScript
-        "dsznajder.es7-react-js-snippets",      //React
+        "formulahendry.auto-rename-tag",        //Auto Rename Tag
     ]
 }

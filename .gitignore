@@ -7,12 +7,4 @@
 
 # Django
 **/__pycache__
-
-# React
-**/frontend/static/**
-!**/frontend/static/css
-!**/frontend/static/frontend
-!**/frontend/static/images
-
-# npm
-**/node_modules
+db.sqlite3
