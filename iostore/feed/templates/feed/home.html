@@ -1,6 +1,14 @@
 {% extends 'base/base.html' %}
-{% load static %}
 {% block content %}
-    <br>
-    <img src="{% static 'base/images/io_store_red.png' %}" alt="I/O Store logo" width="65%">
+    <h1>Home Template</h1>
+    <div>
+        <div>
+            {% for post in posts %}
+                <div>
+                    <h5>{{post.id}} -- <a href={% url 'feed-post' post.id %}>{{post.item}}</a></h5>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock content %}
+ 
