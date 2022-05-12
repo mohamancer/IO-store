@@ -34,7 +34,6 @@ INSTALLED_APPS = [
     'base',
     'feed',
     'offer',
-    'rating',
     'users',
     'django.contrib.admin',
     'django.contrib.auth',
