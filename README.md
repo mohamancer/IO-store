@@ -1,11 +1,13 @@
 # Welcome to the I/O Store! :convenience_store: :100:
-
+> I strongly encourage you to update, refine, and enhance this readme file!
 ## Development Environment
 1. `Python v3.10.4`
 1. Python virtual environment containing requirements from `requirements.txt` file (`Django` is included there)
 
 ## Development workflow
 
+### [Numpy Style Guide](https://numpydoc.readthedocs.io/en/latest/format.html)
+Documentaion by the numpy style guide looks good 👌
 ### Standard acronyms to start a commit message:
 * API: an (incompatible) API change
 * BENCH: changes to the benchmark suite
