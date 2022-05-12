@@ -31,9 +31,11 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'base.apps.BaseConfig',
-    'feed.apps.FeedConfig',
-    'users.apps.UsersConfig',
+    'base',
+    'feed',
+    'offer',
+    'rating',
+    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,4 +127,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'users.User' #defining the user module to be our one(that we made in users/models) instead of the default django one
+# Set our `User` model for authentication
+
+AUTH_USER_MODEL = 'users.User' 
