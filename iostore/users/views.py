@@ -2,7 +2,8 @@ from django.shortcuts import render , redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
-from .forms import MyUserCreationForm
+from .forms import my_user_creation_form, update_user_form
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -39,10 +40,10 @@ def logout_user(request):
 
 
 def register_page(request):
-    form = MyUserCreationForm()
+    form = my_user_creation_form()
 
     if request.method == 'POST':
-        form = MyUserCreationForm(request.POST)
+        form = my_user_creation_form(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -53,3 +54,24 @@ def register_page(request):
             messages.error(request, 'An error occurred during registration')
 
     return render(request, 'users/login_register.html', {'form': form})
+
+@login_required(login_url='login')
+def update_profile(request):
+    user = request.user
+    form = update_user_form(instance=user)
+
+    if request.method == 'POST':
+        form = update_user_form(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('users-profile', pk=user.username)
+
+    return render(request, 'users/update_profile.html', {'form': form})
+
+def profile_page(request, pk):
+    user = User.objects.get(username=pk)
+    context = {'user': user}
+    return render(request, 'users/profile.html', context)
+
+
+    

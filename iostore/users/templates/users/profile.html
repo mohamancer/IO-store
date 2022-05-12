@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+<main class="profile-page layout layout--3">
+  <div class="container">
+
+    <div class="roomList">
+      <div class="profile">
+        <div class="profile__avatar">
+          <div class="avatar avatar--large active">
+            <img src="{{ user.avatar.url }}">
+          </div>
+          {% if user.id == request.user.id%}
+          <div class="edit">
+            <a class="nav-link" href="{% url 'update-profile' %}">Edit</a>
+          </div>
+          {% endif %}
+        </div>
+        <div class="profile__info">
+          <h3>{{user.username}}</h3>
+        </div>
+        <div class="profile__about">
+          <h3>Bio</h3>
+          <p>
+            {{user.bio}}
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+{% endblock content %}
