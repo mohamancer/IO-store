@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'feed',
     'offer',
     'users',
+    'captcha',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -136,3 +137,11 @@ MEDIA_URL = '/media/'
 # Set our `User` model for authentication
 
 AUTH_USER_MODEL = 'users.User' 
+
+# Recaptcha v3 keys  
+# RECAPTCHA_PUBLIC_KEY = '6Lfs5OUfAAAAAD4ad_KVT7JTTltNixe8oIs5wpUR'
+# RECAPTCHA_PRIVATE_KEY = '6Lfs5OUfAAAAALgF7wGA9WVFjSDJjggrEAIQ5s7a'
+
+# Recaptcha v2 keys  
+RECAPTCHA_PUBLIC_KEY = '6Le69eUfAAAAAIZKNm6a75uzhfw5Ra52BH1w0Vvf'
+RECAPTCHA_PRIVATE_KEY = '6Le69eUfAAAAAJ82eMlfHIogRWsR8gIjM7IGflsk'
