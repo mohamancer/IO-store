@@ -9,3 +9,6 @@ Pillow >= 9.1
 # Allow to format Python file automatically
 # Docs: https://pypi.org/project/autopep8/
 autopep8
+
+# embedding google reCAPTCHA
+django-recaptcha
