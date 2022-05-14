@@ -3,24 +3,24 @@
 {% block content %}
 <main class="profile-page layout layout--3">
   <div class="container">
-
     <div class="roomList">
       <div class="profile">
         <div class="profile__avatar">
           <div class="avatar avatar--large active">
-            <img src="{{ user.avatar.url }}">
+            <img src="{{user.avatar.url}}" />
           </div>
-          {% if user.id == request.user.id%}
-          <div class="edit">
-            <a class="nav-link" href="{% url 'update-profile' %}">Edit Profile</a>
-          </div>
-          {% endif %}
         </div>
         <div class="profile__info">
-          <h3>{{user.username}}</h3>
+          <p>{{user.username}}</p>
+          {% if request.user == user %}
+          <a href="{% url 'update-profile' %}" class="btn btn--main btn--pill">Edit Profile</a>
+          {% endif %}
+          <p>{{user.email}}</p>
+
         </div>
+        
         <div class="profile__about">
-          <h3>Bio</h3>
+          <h3>About</h3>
           <p>
             {{user.bio}}
           </p>
