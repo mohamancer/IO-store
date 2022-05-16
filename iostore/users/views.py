@@ -55,7 +55,7 @@ def register_page(request):
 
     return render(request, 'users/login_register.html', {'form': form})
 
-@login_required(login_url='login')
+@login_required(login_url='users-login')
 def update_profile(request):
     user = request.user
     form = update_user_form(instance=user)
