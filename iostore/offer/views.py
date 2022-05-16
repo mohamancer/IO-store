@@ -10,19 +10,20 @@ from .models import Offer, Category, Bid
 
 def offer(request, pk):
     offer = Offer.objects.get(id=pk)
-    # room_messages = room.message_set.all()
+    offer_bids = offer.bid_set.all()
     # participants = room.participants.all()
 
-    # if request.method == 'POST':
-    #     message = Message.objects.create(
-    #         user=request.user,
-    #         room=room,
-    #         body=request.POST.get('body')
-    #     )
-    #     room.participants.add(request.user)
-    #     return redirect('room', pk=room.id)
+    if request.method == 'POST':
+         bid = Bid.objects.create(
+             bidder=request.user,
+             offer=offer,
+             price=request.POST.get('price'),
+             time_of_delivery=request.POST.get('time_of_delivery')
+         )
 
-    context = {'offer': offer}
+         return redirect('offer', pk=offer.id)
+
+    context = {'offer': offer, 'offer_bids':offer_bids}
     return render(request, 'offer/offer.html', context)
 
 @login_required(login_url='users-login')
