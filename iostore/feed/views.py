@@ -5,15 +5,26 @@ from django.db.models import Q
 from offer.models import Offer, Bid, Category
 
 def home(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
 
-    offers = Offer.objects.filter(
-        Q(active=True) &
-        (Q(category__name__icontains=q) |
-        Q(title__icontains=q) |
-        Q(description__icontains=q))
-    ).order_by('-created')
+    offers = Offer.objects.all()
+    all_offers_count = offers.count()
+
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
     categories = Category.objects.all()
+    category_names = [c.name for c in categories]
+    if q in category_names:
+        offers = Offer.objects.filter(
+            Q(active=True) &
+            Q(category__name__exact=q) 
+            ).order_by('-created')
+    else:
+        offers = Offer.objects.filter(
+            Q(active=True) &
+            (Q(category__name__icontains=q) |
+            Q(title__icontains=q) |
+            Q(description__icontains=q))
+        ).order_by('-created')
+    
     offer_count = offers.count()
 
     bids_per_offer = {}
@@ -22,7 +33,8 @@ def home(request):
         bids_per_offer[offer.id]= len(bids)
     
     context = {'offers': offers, 'categories': categories,
-               'offer_count': offer_count,'bids_per_offer':bids_per_offer}
+               'offer_count': offer_count,'bids_per_offer':bids_per_offer,
+               'all_offers_count':all_offers_count}
     return render(request, 'feed/home.html', context)
 
 
