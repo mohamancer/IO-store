@@ -3,6 +3,11 @@
 {% block content %}
 <main class="profile-page layout layout--3">
   <div class="container">
+    <!-- Topics Start -->
+    {% include 'offer/categories_component.html' %}
+    <!-- Topics End -->
+
+    <!-- Room List Start -->
     <div class="roomList">
       <div class="profile">
         <div class="profile__avatar">
@@ -11,14 +16,19 @@
           </div>
         </div>
         <div class="profile__info">
-          <p>{{user.username}}</p>
           {% if request.user == user %}
           <a href="{% url 'update-profile' %}" class="btn btn--main btn--pill">Edit Profile</a>
           {% endif %}
-          <p>{{user.email}}</p>
 
+          <br/>
+          <h3>{{user.username}}</h3>
         </div>
-        
+        <div class="profile__about">
+          <h3>Email</h3>
+          <p>
+            {{user.email}}
+          </p>
+        </div>
         <div class="profile__about">
           <h3>About</h3>
           <p>
@@ -27,8 +37,20 @@
         </div>
       </div>
 
-    </div>
+      <div class="roomList__header">
+        <div>
+          <h2>Offers made by {{user.username}}</h2>
+        </div>
+      </div>
+      {% include 'offer/feed_component.html' %}
 
+
+    </div>
+    <!-- Room List End -->
+
+    <!-- Activities Start -->
+    {% include 'offer/activity_component.html' %}
+    <!-- Activities End -->
   </div>
 </main>
 {% endblock content %}

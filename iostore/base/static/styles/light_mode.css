@@ -184,8 +184,8 @@ a {
 
 .avatar.avatar--large img {
   display: block;
-  width: 8rem;
-  height: 8rem;
+  width: 16rem;
+  height: 16rem;
   border-radius: 50%;
 }
 
@@ -863,7 +863,7 @@ a {
 }
 
 .profile__info h3 {
-  font-size: 2rem;
+  font-size: 4rem;
   color: var(--color-light);
   font-weight: 400;
 }
