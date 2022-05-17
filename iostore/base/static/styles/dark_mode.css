@@ -151,10 +151,8 @@ a {
   content: "";
   display: block;
   position: absolute;
-  /* background-color: var(--color-gray); */
   z-index: 111;
   border-radius: 50%;
-  /* border: 0.3rem solid var(--color-dark); */
 }
 
 .avatar.avatar--small img {
@@ -184,8 +182,8 @@ a {
 
 .avatar.avatar--large img {
   display: block;
-  width: 8rem;
-  height: 8rem;
+  width: 16rem;
+  height: 16rem;
   border-radius: 50%;
 }
 
@@ -863,7 +861,7 @@ a {
 }
 
 .profile__info h3 {
-  font-size: 2rem;
+  font-size: 4rem;
   color: var(--color-light);
   font-weight: 400;
 }

@@ -2,8 +2,10 @@ from django.shortcuts import render , redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
+from offer.models import Category, Offer
 from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 
@@ -69,8 +71,21 @@ def update_profile(request):
     return render(request, 'users/update_profile.html', {'form': form})
 
 def profile_page(request, pk):
+    categories = Category.objects.all()
+    all_offers_count = Offer.objects.all().count()
+    temp = Offer.objects.all().order_by('-created')
+    offers = []
+    for offer in temp:
+        if offer.host.username == pk:
+            offers.append(offer)
+
+    bids_per_offer = {}
+    for offer in offers:
+        bids = offer.bid_set.all()
+        bids_per_offer[offer.id]= len(bids)
+
     user = User.objects.get(username=pk)
-    context = {'user': user}
+    context = {'user': user, 'categories': categories, 'all_offers_count': all_offers_count, 'offers': offers, 'bids_per_offer': bids_per_offer}
     return render(request, 'users/profile.html', context)
 
 
