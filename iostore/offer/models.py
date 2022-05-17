@@ -28,12 +28,11 @@ class Offer(models.Model):
 class Bid(models.Model):
     bidder = models.ForeignKey(User, on_delete=models.CASCADE,null=True)
     price = models.FloatField()
-    eta = models.DateTimeField()
+    time_of_delivery = models.DateTimeField()
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE,null=True)
-    date_of_bid = models.DateTimeField(auto_now_add=True)
-    
 
-    date_of_creation = models.DateTimeField(auto_now_add=True) 
+    created = models.DateTimeField(auto_now_add=True) 
     updated = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.bidder.username + ' has bid ' + str(self.price)

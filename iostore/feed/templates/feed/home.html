@@ -5,12 +5,8 @@
 <main class="layout layout--3">
   <div class="container">
 
-    <!-- Topics Start -->
-    {% comment %} {% include 'base/topics_component.html' %} {% endcomment %}
+    {% include 'offer/categories_component.html' %}
 
-    <!-- Topics End -->
-
-    <!-- Room List Start -->
     <div class="roomList">
       {% comment %} <div class="mobile-menu">
         <form action="{% url 'feed-home' %}" method="GET" class="header__search">
@@ -32,7 +28,7 @@
 
       <div class="roomList__header">
         <div>
-          <p>{{offer_count}} Offers available</p>
+          <h1>{{offer_count}} Offers Available</h1>
         </div>
 
         <a class="btn btn--main" href="{% url 'create-offer' %}">
@@ -49,12 +45,9 @@
       {% include 'offer/feed_component.html' %}
 
     </div>
-    <!-- Room List End -->
 
-    <!-- Activities Start -->
-    {% comment %} {% include 'base/activity_component.html' %} {% endcomment %}
+    {% include 'offer/activity_component.html' %}
 
-    <!-- Activities End -->
   </div>
 </main>
 
