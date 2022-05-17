@@ -54,7 +54,7 @@ def createOffer(request):
 def updateOffer(request, pk):
     offer = Offer.objects.get(id=pk)
     form = OfferForm(instance=offer)
-    categories = category.objects.all()
+    categories = Category.objects.all()
     if request.user != offer.host:
         return HttpResponse('Your are not allowed here!!')
 
