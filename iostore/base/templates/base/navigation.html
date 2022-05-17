@@ -2,7 +2,12 @@
 <header class="header header--loggedIn">
     <div class="container">
         <a href="{% url 'feed-home' %}" class="header__logo">
-            <img src="{% static 'base/images/LogoMakr-1vHi1H.png' %}" />
+            {% if request.user.is_dark_mode or not request.user.is_authenticated%}
+                <img src="{% static 'base/images/dark_mode_logo.png' %}" />
+            {% else %}
+                <img src="{% static 'base/images/light_mode_logo.png' %}" />
+            {% endif %}
+
             <h1>I/O Store</h1>
         </a>
         <form class="header__search" method="GET" action="{% url 'feed-home' %}">

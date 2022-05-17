@@ -10,6 +10,7 @@ class User(AbstractUser):
     avatar = models.ImageField(default='avatar.svg', null=True)
     rating = models.FloatField(blank=True,null=True)
     number_of_reviews = models.IntegerField(default=0,blank=True)
+    is_dark_mode = models.BooleanField(default = True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
