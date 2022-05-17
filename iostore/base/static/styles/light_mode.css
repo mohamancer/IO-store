@@ -151,10 +151,8 @@ a {
   content: "";
   display: block;
   position: absolute;
-  /* background-color: var(--color-gray); */
   z-index: 111;
   border-radius: 50%;
-  /* border: 0.3rem solid var(--color-dark); */
 }
 
 .avatar.avatar--small img {
@@ -901,9 +899,10 @@ a {
   background: var(--color-dark);
   max-height: 80vh;
   border-radius: 1rem;
-  overflow: hidden;
   position: relative;
 }
+
+
 
 @media screen and (max-width: 900px) {
   .participants {
@@ -1099,6 +1098,7 @@ a {
   padding: 2rem;
   position: absolute;
   z-index: 111;
+  top: 500px;
   bottom: 0;
   left: 0;
   right: 0;
