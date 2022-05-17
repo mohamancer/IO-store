@@ -91,5 +91,13 @@ def deleteBid(request, pk):
 
     if request.method == 'POST':
         bid.delete()
+        remaining_bids = Bid.objects.all().filter(offer = bid.offer)
+        mn = float('inf')
+        for remaning_bid in remaining_bids:
+            mn = min(mn , remaning_bid.price)
+        bid.offer.lowest_bid = mn
+        if mn == float('inf'):
+            bid.offer.lowest_bid = -1
+        bid.offer.save()
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': bid})
