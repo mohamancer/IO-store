@@ -5,4 +5,5 @@ urlpatterns = [
     path('create-offer/', views.createOffer, name="create-offer"),
     path('update-offer/<str:pk>/', views.updateOffer, name="update-offer"),
     path('delete-offer/<str:pk>/', views.deleteOffer, name="delete-offer"),
+    path('delete-bid/<str:pk>/', views.deleteBid, name="delete-bid"),
 ]
