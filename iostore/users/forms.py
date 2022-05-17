@@ -1,5 +1,6 @@
+from django import forms
 from django.forms import ModelForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UsernameField
 from .models import User
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
@@ -19,3 +20,24 @@ class update_user_form(ModelForm):
     class Meta:
         model = User
         fields = ['email', 'phone_number', 'bio', 'avatar', 'is_dark_mode']
+
+
+class user_login_form(forms.Form):
+
+    username = UsernameField(widget=forms.TextInput(
+        attrs={
+            "autofocus": True,
+            "placeholder": 'Enter username'
+            }))
+    password = forms.CharField(
+        label=("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={"autocomplete": "current-password", "placeholder": 'Enter password'}),
+    )
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(
+        api_params={'hl': 'en'}
+    ))
+
+    class Meta:
+        model = User
+        fields = ['username, password']
