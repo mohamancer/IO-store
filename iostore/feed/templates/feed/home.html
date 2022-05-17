@@ -28,7 +28,11 @@
 
       <div class="roomList__header">
         <div>
-          <h1>{{offer_count}} Offers Available</h1>
+          {% if offer_count == 1 %}
+            <h1>{{offer_count}} Offer Available</h1>
+          {% else %}
+            <h1>{{offer_count}} Offers Available</h1>
+          {% endif %}
         </div>
 
         <a class="btn btn--main" href="{% url 'create-offer' %}">

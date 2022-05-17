@@ -87,8 +87,11 @@
   
       <!--   Start -->
       <div class="participants">
-       
-        <h3 class="participants__top">{{offer_bids.count}} Bids Available </h3>
+        {% if offer_bids.count == 1 %}
+          <h3 class="participants__top">{{offer_bids.count}} Bid Available </h3>
+        {% else %}
+          <h3 class="participants__top">{{offer_bids.count}} Bids Available </h3>
+        {% endif %}
         <div class="room__conversation">
             <div class="participants__list scroll" >
     
