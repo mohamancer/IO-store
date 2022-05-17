@@ -73,21 +73,14 @@
 
   
         </div>
-        <div class="room__message">
-            
-            <form action="" method="POST">
-                {% csrf_token %}
-                <input name="price" placeholder="enter your price here..." />
 
-                <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
-            </form>
-        </div>
 
       </div>
       <!-- Offer End -->
   
       <!--   Start -->
       <div class="participants">
+        
         {% if offer_bids.count == 1 %}
           <h3 class="participants__top">{{offer_bids.count}} Bid Available </h3>
         {% else %}
@@ -133,12 +126,20 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="room__message">
+            
+          <form action="" method="POST">
+              {% csrf_token %}
+              <input name="price" placeholder="enter your price here..." />
+  
+              <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
+          </form>
+        </div>
 
-
-        
-    
-    
       </div>
+
+
+
       <!--  End -->
     </div>
   </main>
