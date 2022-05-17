@@ -35,4 +35,4 @@ class Bid(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.bidder.username + ' has bid ' + str(self.price)
+        return self.bidder.username +"'s bid"

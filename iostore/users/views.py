@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 from offer.models import Category, Offer
-from .forms import my_user_creation_form, update_user_form
+from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
@@ -12,21 +12,28 @@ from django.db.models import Q
 
 def login_page(request):
     page = 'users-login'
+    login_form = user_login_form()
+
     if request.user.is_authenticated:
         return redirect('feed-home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+        login_form = user_login_form(request.POST)
+        if login_form.is_valid():
+            username = request.POST.get('username').lower()
+            password = request.POST.get('password')
 
-        if user is not None:
-            login(request, user)
-            return redirect('feed-home')
-        else:
-            messages.error(request, 'Username OR password does not exit')
+            user = authenticate(request, username=username, password=password)
 
-    context = {'page': page}
+            if user is not None:
+                login(request, user)
+                return redirect('feed-home')
+            else:
+                messages.error(request, 'Username OR password does not exit')
+        else:  
+            messages.error(request, 'An error occurred during login')
+
+    context = {'page': page, 'login_form': login_form}
     return render(request, 'users/login_register.html' , context)
 
 def logout_user(request):

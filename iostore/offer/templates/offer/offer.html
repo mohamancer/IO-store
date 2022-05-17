@@ -55,7 +55,7 @@
             <div class="room__info">
               <h3>{{offer.title}}</h3>
               {% load split %}
-              <span>{{offer.created|timesince|split}} ago</span>
+              <span>Posted {{offer.created|timesince|split}} ago</span>
             </div>
             <div class="room__hosted">
               <p>Offered By</p>
@@ -66,27 +66,21 @@
                 <span>{{offer.host.username}}</span>
               </a>
             </div>
+            <h1>Active until {{offer.bidding_deadline}}</h1>
             <span class="room__topics">{{offer.category}}</span>
           </div>
   
 
   
         </div>
-        <div class="room__message">
-            
-            <form action="" method="POST">
-                {% csrf_token %}
-                <input name="price" placeholder="enter your price here..." />
 
-                <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
-            </form>
-        </div>
 
       </div>
       <!-- Offer End -->
   
       <!--   Start -->
       <div class="participants">
+        
         {% if offer_bids.count == 1 %}
           <h3 class="participants__top">{{offer_bids.count}} Bid Available </h3>
         {% else %}
@@ -111,7 +105,7 @@
                     </div>
     
                     {% if request.user == bid.bidder %}
-                    <a href="">
+                    <a href="{% url 'delete-bid' bid.id %}">
                     <div class="thread__delete">
                         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
                         <title>remove</title>
@@ -132,12 +126,20 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="room__message">
+            
+          <form action="" method="POST">
+              {% csrf_token %}
+              <input name="price" placeholder="enter your price here..." />
+  
+              <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
+          </form>
+        </div>
 
-
-        
-    
-    
       </div>
+
+
+
       <!--  End -->
     </div>
   </main>
