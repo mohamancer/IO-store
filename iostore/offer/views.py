@@ -61,9 +61,10 @@ def updateOffer(request, pk):
     if request.method == 'POST':
         category_name = request.POST.get('category')
         category, created = Category.objects.get_or_create(name=category_name)
-        offer.name = request.POST.get('title')
+        offer.title = request.POST.get('title')
         offer.category = category
         offer.description = request.POST.get('description')
+        offer.bidding_deadline = request.POST.get('bidding_deadline')
         offer.save()
         return redirect('feed-home')
 
@@ -81,3 +82,15 @@ def deleteOffer(request, pk):
         offer.delete()
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': offer})
+
+@login_required(login_url='users-login')
+def deleteBid(request, pk):
+    bid = Bid.objects.get(id=pk)
+
+    if request.user != bid.bidder:
+        return HttpResponse('Your are not allowed here!!')
+
+    if request.method == 'POST':
+        bid.delete()
+        return redirect('feed-home')
+    return render(request, 'offer/delete.html', {'obj': bid})
