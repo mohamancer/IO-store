@@ -6,8 +6,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="{% static 'base/images/LogoMakr-1vHi1H.png' %}" type="image/x-icon" />
-    <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
+    {% if request.user.is_dark_mode or not request.user.is_authenticated%}
+        <link rel="shortcut icon" href="{% static 'base/images/dark_mode_logo.png' %}" type="image/x-icon" />
+        <link rel="stylesheet" href="{% static 'styles/dark_mode.css' %}" />
+    {% else %}
+        <link rel="shortcut icon" href="{% static 'base/images/light_mode_logo.png' %}" type="image/x-icon" />
+        <link rel="stylesheet" href="{% static 'styles/light_mode.css' %}" />
+    {% endif %}
+
     <title>I/O Store</title>
 </head>
 

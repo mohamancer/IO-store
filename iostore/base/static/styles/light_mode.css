@@ -1,18 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
 
 :root {
-  --color-main: #71c6dd;
-  --color-main-light: #e1f6fb;
-  --color-dark: #3f4156;
-  --color-dark-medium: #51546e;
-  --color-dark-light: #696d97;
-  --color-light: #e5e5e5;
+  --color-main: #8e3922;
+  --color-main-light: #8e3922;
+  --color-dark: #c0bea9;
+  --color-dark-medium: #c0bea9;
+  --color-dark-light: #76765b;
+  --color-light: #8e3922;
   --color-gray: #8b8b8b;
-  --color-light-gray: #b2bdbd;
-  --color-bg: #2d2d39;
+  --color-light-gray: #8e3922;
+  --color-bg: #d2d2c6;
   --color-success: #5dd693;
   --color-error: #fc4b0b;
-  --color-search-bar: #ffffff
+  --color-search-bar: #ffffff;
+  --color-navbar: #c0bea9;
 }
 
 /*========== base styles ==========*/
@@ -156,10 +157,6 @@ a {
   /* border: 0.3rem solid var(--color-dark); */
 }
 
-.avatar.active::after {
-  /* background-color: var(--color-success); */
-}
-
 .avatar.avatar--small img {
   width: 2.8rem;
   height: 2.8rem;
@@ -268,7 +265,7 @@ a {
 
 .header {
   padding: 1.5rem;
-  background-color: var(--color-dark);
+  background-color: var(--color-navbar);
 }
 
 .header > .container {
