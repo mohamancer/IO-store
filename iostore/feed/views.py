@@ -12,8 +12,8 @@ def home(request):
         (Q(category__name__icontains=q) |
         Q(title__icontains=q) |
         Q(description__icontains=q))
-    )
-    categories = Category.objects.all()[0:5]
+    ).order_by('-created')
+    categories = Category.objects.all()
     offer_count = offers.count()
 
     bids_per_offer = {}
@@ -22,7 +22,7 @@ def home(request):
         bids_per_offer[offer.id]= len(bids)
     
     context = {'offers': offers, 'categories': categories,
-               'offer_count': offer_count,'bid_per_offer':bids_per_offer}
+               'offer_count': offer_count,'bids_per_offer':bids_per_offer}
     return render(request, 'feed/home.html', context)
 
 

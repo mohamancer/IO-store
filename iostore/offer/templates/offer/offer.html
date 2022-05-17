@@ -54,12 +54,13 @@
           <div class="room__header scroll">
             <div class="room__info">
               <h3>{{offer.title}}</h3>
-              <span>{{offer.created|timesince}} ago</span>
+              {% load split %}
+              <span>{{offer.created|timesince|split}} ago</span>
             </div>
             <div class="room__hosted">
-              <p>Hosted By</p>
-              <a href="{% url 'users-profile' offer.host.id %}" class="room__author">
-                <div class="avatar avatar--small">
+              <p>Offered By</p>
+              <a href="{% url 'users-profile' offer.host.username %}" class="room__author">
+                <div class="avatar avatar--medium">
                   <img src="{{offer.host.avatar.url}}" />
                 </div>
                 <span>{{offer.host.username}}</span>
@@ -76,6 +77,7 @@
             <form action="" method="POST">
                 {% csrf_token %}
                 <input name="price" placeholder="enter your price here..." />
+
                 <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
             </form>
         </div>
@@ -86,7 +88,7 @@
       <!--   Start -->
       <div class="participants">
        
-        <h3 class="participants__top">Bidding <span>({{offer_bids.count}} Bids)</span></h3>
+        <h3 class="participants__top">{{offer_bids.count}} Bids Available </h3>
         <div class="room__conversation">
             <div class="participants__list scroll" >
     
@@ -95,13 +97,14 @@
                 <div class="thread">
                 <div class="thread__top">
                     <div class="thread__author">
-                    <a href="{% url 'users-profile' bid.bidder.id %}" class="thread__authorInfo">
-                        <div class="avatar avatar--small">
+                    <a href="{% url 'users-profile' bid.bidder.username %}" class="thread__authorInfo">
+                        <div class="avatar avatar--medium">
                         <img src="{{bid.bidder.avatar.url}}" />
                         </div>
                         <span>{{bid.bidder.username}}</span>
                     </a>
-                    <span class="thread__date">{{bid.created|timesince}} ago</span>
+                    {% load split %}
+                    <span class="thread__date">{{bid.created|timesince|split}} ago</span>
                     </div>
     
                     {% if request.user == bid.bidder %}

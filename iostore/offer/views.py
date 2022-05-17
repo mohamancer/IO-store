@@ -14,14 +14,18 @@ def offer(request, pk):
     # participants = room.participants.all()
 
     if request.method == 'POST':
-         bid = Bid.objects.create(
-             bidder=request.user,
-             offer=offer,
-             price=request.POST.get('price'),
-             time_of_delivery=request.POST.get('time_of_delivery')
-         )
-
-         return redirect('offer', pk=offer.id)
+        bid = Bid.objects.create(
+            bidder=request.user,
+            offer=offer,
+            price=request.POST.get('price'),
+            time_of_delivery=request.POST.get('time_of_delivery')
+        )
+        if offer.lowest_bid == -1:
+            offer.lowest_bid = float(request.POST.get('price'))
+        else:
+            offer.lowest_bid = min(offer.lowest_bid, float(request.POST.get('price')))
+        offer.save()
+        return redirect('offer', pk=offer.id)
 
     context = {'offer': offer, 'offer_bids':offer_bids}
     return render(request, 'offer/offer.html', context)
