@@ -107,6 +107,18 @@ a {
   margin-left: 7.5rem;
 }
 
+.btn--accept_bid {
+  background-color: var(--color-main);
+  color: var(--color-dark);
+  position:absolute;
+  bottom:10px;
+  right:10px;
+  text-align: center;
+  padding: 7px;
+}
+
+
+
 .btn:hover {
   opacity: 1;
 }
@@ -211,6 +223,12 @@ a {
   background-color: var(--color-gray);
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 .dropdown-menu {
   z-index: 111;
   position: absolute;
@@ -486,7 +504,6 @@ a {
   .topics {
     display: none;
   }
-
   .layout--3 > .container > div:nth-child(2) {
     flex-basis: 100%;
   }
@@ -495,7 +512,6 @@ a {
 /*==============================
 =>  Topics
 ================================*/
-
 .form__group {
   margin-bottom: 2rem;
   width: 100%;

@@ -5,7 +5,7 @@ from django.db.models import Q
 from offer.models import Offer, Bid, Category
 
 def home(request):
-
+    bids = Bid.objects.all()
     offers = Offer.objects.all()
     all_offers_count = offers.count()
 
@@ -29,12 +29,12 @@ def home(request):
 
     bids_per_offer = {}
     for offer in offers:
-        bids = offer.bid_set.all()
-        bids_per_offer[offer.id]= len(bids)
+        local_bids = offer.bid_set.all()
+        bids_per_offer[offer.id]= len(local_bids)
     
     context = {'offers': offers, 'categories': categories,
                'offer_count': offer_count,'bids_per_offer':bids_per_offer,
-               'all_offers_count':all_offers_count}
+               'all_offers_count':all_offers_count, 'bids':bids}
     return render(request, 'feed/home.html', context)
 
 
