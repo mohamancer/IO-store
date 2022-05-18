@@ -50,12 +50,13 @@
           {% endif %}
   
         </div>
-        <div class="room__box scroll">
+
           <div class="room__header scroll">
             <div class="room__info">
               <h3>{{offer.title}}</h3>
               {% load split %}
               <span>Posted {{offer.created|timesince|split}} ago</span>
+              
             </div>
             <div class="room__hosted">
               <p>Offered By</p>
@@ -66,16 +67,15 @@
                 <span>{{offer.host.username}}</span>
               </a>
             </div>
-            <h1>Active until {{offer.bidding_deadline}}</h1>
             <span class="room__topics">{{offer.category}}</span>
-          </div>
-  
-
-  
+            <h1>Active until {{offer.bidding_deadline}}</h1>
+            <p>{{offer.description}}</p>
+           
+            
         </div>
 
 
-      </div>
+       </div>
       <!-- Offer End -->
   
       <!--   Start -->
@@ -90,8 +90,8 @@
             <div class="participants__list scroll" >
     
     
-                {% for bid in offer_bids %}
-                <div class="thread">
+              {% for bid in offer_bids %}
+              <div class="thread">
                 <div class="thread__top">
                     <div class="thread__author">
                     <a href="{% url 'users-profile' bid.bidder.username %}" class="thread__authorInfo">
@@ -100,8 +100,6 @@
                         </div>
                         <span>{{bid.bidder.username}}</span>
                     </a>
-                    {% load split %}
-                    <span class="thread__date">{{bid.created|timesince|split}} ago</span>
                     </div>
     
                     {% if request.user == bid.bidder %}
@@ -122,8 +120,8 @@
                     <br>
                     {{bid.time_of_delivery}}
                 </div>
-                </div>
-                {% endfor %}
+              </div>
+              {% endfor %}
             </div>
         </div>
         <div class="room__message">
@@ -132,7 +130,11 @@
               {% csrf_token %}
               <input name="price" placeholder="enter your price here..." />
   
-              <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
+              <input name="time_of_delivery" type="datetime-local"  />
+              <button class="btn btn--bid" type="submit">
+                <h2>Add bid</h2>
+              </button>
+
           </form>
         </div>
 
