@@ -17,5 +17,5 @@ def periodically_mark_offers_inactive_by_deadline():
         sleep(60)
 
 def periodically_mark_offers_inactive_by_deadline_thread():
-    update_thread = threading.Thread(target=periodically_mark_offers_inactive_by_deadline, name='update_thread')
+    update_thread = threading.Thread(target=periodically_mark_offers_inactive_by_deadline, name='update_thread', daemon=True)
     update_thread.start()
