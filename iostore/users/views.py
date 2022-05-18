@@ -72,7 +72,7 @@ def update_profile(request):
 
 def profile_page(request, pk):
     categories = Category.objects.all()
-    all_offers_count = Offer.objects.all().count()
+    all_offers_count = 0
     temp = Offer.objects.all().order_by('-created')
     offers = []
     for offer in temp:
@@ -84,8 +84,17 @@ def profile_page(request, pk):
         bids = offer.bid_set.all()
         bids_per_offer[offer.id]= len(bids)
 
+    category_to_count = {}
+    q1 = Offer.objects.all()
+    for c in categories:
+        cnt = q1.filter(category__id = c.id, active = True).count()
+        if cnt != 0:
+            category_to_count[c] = cnt
+            all_offers_count += cnt
+
+
     user = User.objects.get(username=pk)
-    context = {'user': user, 'categories': categories, 'all_offers_count': all_offers_count, 'offers': offers, 'bids_per_offer': bids_per_offer}
+    context = {'user': user, 'category_to_count': category_to_count, 'all_offers_count': all_offers_count, 'offers': offers, 'bids_per_offer': bids_per_offer}
     return render(request, 'users/profile.html', context)
 
 
