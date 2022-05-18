@@ -10,7 +10,7 @@ from .models import Offer, Category, Bid
 
 def offer(request, pk):
     offer = Offer.objects.get(id=pk)
-    offer_bids = offer.bid_set.all()
+    offer_bids = offer.bid_set.all().order_by('-created')
 
     if request.method == 'POST':
         bid = Bid.objects.create(
