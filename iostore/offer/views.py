@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -88,7 +87,6 @@ def deleteBid(request, pk):
 
     if request.user != bid.bidder:
         return HttpResponse('Your are not allowed here!!')
-
     if request.method == 'POST':
         bid.delete()
         remaining_bids = Bid.objects.all().filter(offer = bid.offer)
@@ -105,7 +103,6 @@ def deleteBid(request, pk):
 @login_required(login_url='users-login')
 def acceptBid(request, pk):
     bid = Bid.objects.get(id=pk)
-
     if request.user != bid.offer.host:
         return HttpResponse('Your are not allowed here!!')
 
