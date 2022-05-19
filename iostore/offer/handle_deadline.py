@@ -5,11 +5,13 @@ from django.utils import timezone
 from time import sleep
 
 def mark_offers_inactive_by_deadline():   
-    make_inactive = Offer.objects.filter(bidding_deadline__lte=timezone.now() , active = True)
-    for to_make_inactive_offer in make_inactive:
-        to_make_inactive_offer.active = False
-        to_make_inactive_offer.save()
-
+    try:
+        make_inactive = Offer.objects.filter(bidding_deadline__lte=timezone.now() , active = True)
+        for to_make_inactive_offer in make_inactive:
+            to_make_inactive_offer.active = False
+            to_make_inactive_offer.save()
+    except:
+        pass
 
 def periodically_mark_offers_inactive_by_deadline():
     while True:
