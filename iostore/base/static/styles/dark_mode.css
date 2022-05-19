@@ -222,6 +222,14 @@ a {
   right: 3.5px;
 }
 
+::-webkit-datetime-edit-day-field,
+::-webkit-datetime-edit-month-field,
+::-webkit-datetime-edit-year-field,
+::-webkit-datetime-edit-hour-field,
+::-webkit-datetime-edit-ampm-field {
+  color: white;
+}
+
 .scroll::-webkit-scrollbar {
   width: 0.6rem;
   background-color: rgb(41, 41, 46);

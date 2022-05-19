@@ -21,3 +21,9 @@ if (photoInput)
 // Scroll to Bottom
 const conversationThread = document.querySelector(".room__box");
 if (conversationThread) conversationThread.scrollTop = conversationThread.scrollHeight;
+
+function showAlert() {
+  var myText = "You can't bid on your own offer";
+  alert (myText);
+}
+
