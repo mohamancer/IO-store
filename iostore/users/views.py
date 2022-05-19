@@ -74,6 +74,8 @@ def profile_page(request, pk):
     categories = Category.objects.all()
     all_offers_count = 0
     temp = Offer.objects.all().order_by('-created')
+    offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
+                                                            .order_by('final_bid__time_of_delivery')
     offers = []
     for offer in temp:
         if offer.host.username == pk:
@@ -94,7 +96,9 @@ def profile_page(request, pk):
 
 
     user = User.objects.get(username=pk)
-    context = {'user': user, 'category_to_count': category_to_count, 'all_offers_count': all_offers_count, 'offers': offers, 'bids_per_offer': bids_per_offer}
+    context = {'user': user, 'category_to_count': category_to_count,
+                'all_offers_count': all_offers_count,'offers': offers,
+                 'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received}
     return render(request, 'users/profile.html', context)
 
 
