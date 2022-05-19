@@ -144,6 +144,15 @@ a {
   border: 2px solid var(--color-main);
 }
 
+.btn--closed {
+  background-color: var(--color-main);
+  color: var(--color-dark);
+  position:absolute;
+  right:33%;
+  text-align: center;
+  padding: 14px;
+}
+
 .action-button {
   background: transparent;
   border: none;

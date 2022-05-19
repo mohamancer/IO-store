@@ -34,7 +34,7 @@ def createOffer(request):
     categories = Category.objects.all()
     if request.method == 'POST':
         category_name = request.POST.get('category')
-        category, created = Category.objects.get_or_create(name=category_name)
+        category = Category.objects.get(id=category_name)
 
         Offer.objects.create(
             host=request.user,
