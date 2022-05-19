@@ -172,10 +172,13 @@
         </div>
         <div class="room__message">
           {% if offer.active %}
+          
             <form action="" method="POST">
                 {% csrf_token %}
                 <input name="price" placeholder="enter your price here..." type="number"/>
-                <input name="time_of_delivery" type="datetime-local" />
+                <input name="time_of_delivery" type="datetime-local" 
+                        max='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'
+                        min='{% now "Y-m-d" %}T{% now "H:i" %}'/>
                 <button class="btn btn--bid" type="submit">
                   <h2>Add bid</h2>
                 </button>
