@@ -5,8 +5,9 @@ from .models import User
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 
+
 class my_user_creation_form(UserCreationForm):
-    
+
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(
         api_params={'hl': 'en'}
     ))
@@ -15,6 +16,7 @@ class my_user_creation_form(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
         exclude = ['captcha']
+
 
 class update_user_form(ModelForm):
     class Meta:
@@ -28,11 +30,12 @@ class user_login_form(forms.Form):
         attrs={
             "autofocus": True,
             "placeholder": 'Enter username'
-            }))
+        }))
     password = forms.CharField(
         label=("Password"),
         strip=False,
-        widget=forms.PasswordInput(attrs={"autocomplete": "current-password", "placeholder": 'Enter password'}),
+        widget=forms.PasswordInput(
+            attrs={"autocomplete": "current-password", "placeholder": 'Enter password'}),
     )
     captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox(
         api_params={'hl': 'en'}

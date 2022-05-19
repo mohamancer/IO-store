@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 from .forms import OfferForm
 from .models import Offer, Category, Bid
-# Create your views here.
 
 
 def offer(request, pk):
@@ -21,12 +19,14 @@ def offer(request, pk):
         if offer.lowest_bid == -1:
             offer.lowest_bid = float(request.POST.get('price'))
         else:
-            offer.lowest_bid = min(offer.lowest_bid, float(request.POST.get('price')))
+            offer.lowest_bid = min(
+                offer.lowest_bid, float(request.POST.get('price')))
         offer.save()
         return redirect('offer', pk=offer.id)
 
-    context = {'offer': offer, 'offer_bids':offer_bids}
+    context = {'offer': offer, 'offer_bids': offer_bids}
     return render(request, 'offer/offer.html', context)
+
 
 @login_required(login_url='users-login')
 def createOffer(request):
@@ -40,12 +40,13 @@ def createOffer(request):
             category=category,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            bidding_deadline = request.POST.get('bidding_deadline')
+            bidding_deadline=request.POST.get('bidding_deadline')
         )
         return redirect('feed-home')
 
     context = {'form': form, 'categories': categories}
     return render(request, 'offer/offer_form.html', context)
+
 
 @login_required(login_url='users-login')
 def updateOffer(request, pk):
@@ -68,6 +69,7 @@ def updateOffer(request, pk):
     context = {'form': form, 'categories': categories, 'offer': offer}
     return render(request, 'offer/offer_form.html', context)
 
+
 @login_required(login_url='users-login')
 def deleteOffer(request, pk):
     offer = Offer.objects.get(id=pk)
@@ -80,6 +82,7 @@ def deleteOffer(request, pk):
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': offer})
 
+
 @login_required(login_url='users-login')
 def deleteBid(request, pk):
     bid = Bid.objects.get(id=pk)
@@ -88,16 +91,17 @@ def deleteBid(request, pk):
         return HttpResponse('Your are not allowed here!!')
     if request.method == 'POST':
         bid.delete()
-        remaining_bids = Bid.objects.all().filter(offer = bid.offer)
+        remaining_bids = Bid.objects.all().filter(offer=bid.offer)
         mn = float('inf')
         for remaning_bid in remaining_bids:
-            mn = min(mn , remaning_bid.price)
+            mn = min(mn, remaning_bid.price)
         bid.offer.lowest_bid = mn
         if mn == float('inf'):
             bid.offer.lowest_bid = -1
         bid.offer.save()
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': bid})
+
 
 @login_required(login_url='users-login')
 def acceptBid(request, pk):
