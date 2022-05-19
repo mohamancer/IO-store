@@ -798,12 +798,12 @@ input::-webkit-inner-spin-button {
 
 .activities__box {
   margin: 1.5rem;
-  padding: 1.5rem;
+  padding: 0.5rem;
   border: 2px solid var(--color-dark-medium);
   border-radius: 5px;
 }
 
-.activities__boxHeader p {
+.activities__boxHeader a {
   font-size: 1.4rem;
   line-height: 1.3;
 }
@@ -815,7 +815,7 @@ input::-webkit-inner-spin-button {
 }
 
 .activities__boxContent {
-  margin-left: 4.2rem;
+  margin-left: .5rem;
 }
 
 .activities__boxContent {
