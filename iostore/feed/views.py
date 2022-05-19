@@ -23,7 +23,7 @@ def home(request):
         if cnt != 0:
             category_to_count[c] = cnt
             all_offers_count += cnt
-
+    
     if q in category_names:
         offers = Offer.objects.filter(
             Q(active=True) &
