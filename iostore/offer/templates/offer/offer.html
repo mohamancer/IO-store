@@ -50,12 +50,13 @@
           {% endif %}
   
         </div>
-        <div class="room__box scroll">
+
           <div class="room__header scroll">
             <div class="room__info">
               <h3>{{offer.title}}</h3>
               {% load split %}
               <span>Posted {{offer.created|timesince|split}} ago</span>
+              
             </div>
             <div class="room__hosted">
               <p>Offered By</p>
@@ -66,79 +67,129 @@
                 <span>{{offer.host.username}}</span>
               </a>
             </div>
-            <h1>Active until {{offer.bidding_deadline}}</h1>
             <span class="room__topics">{{offer.category}}</span>
-          </div>
-  
-
-  
-        </div>
-        <div class="room__message">
+            <h1>Active until {{offer.bidding_deadline}}</h1>
+            <p>{{offer.description}}</p>
+           
             
-            <form action="" method="POST">
-                {% csrf_token %}
-                <input name="price" placeholder="enter your price here..." />
-
-                <input name="time_of_delivery" type="datetime-local" placeholder="when are you delivering?" />
-            </form>
         </div>
 
-      </div>
+
+       </div>
       <!-- Offer End -->
   
       <!--   Start -->
       <div class="participants">
+        
         {% if offer_bids.count == 1 %}
           <h3 class="participants__top">{{offer_bids.count}} Bid Available </h3>
         {% else %}
           <h3 class="participants__top">{{offer_bids.count}} Bids Available </h3>
         {% endif %}
         <div class="room__conversation">
-            <div class="participants__list scroll" >
-    
-    
+            <div class="participants__list scroll">
+              {% if offer.final_bid %}
                 {% for bid in offer_bids %}
-                <div class="thread">
-                <div class="thread__top">
-                    <div class="thread__author">
-                    <a href="{% url 'users-profile' bid.bidder.username %}" class="thread__authorInfo">
-                        <div class="avatar avatar--medium">
-                        <img src="{{bid.bidder.avatar.url}}" />
+                  <div class="thread">
+                    {%if offer.final_bid == bid%}
+                    <button class="btn btn--accept_bid" style="cursor:default">
+                      Accepted
+                    </button> 
+                    {%endif%}
+                    <div class="thread__top">
+                      <div class="thread__author">
+                        <a href="{% url 'users-profile' bid.bidder.username %}" class="thread__authorInfo">
+                          <div class="avatar avatar--medium">
+                            <img src="{{bid.bidder.avatar.url}}" />
+                          </div>
+                          <span>{{bid.bidder.username}}</span>
+                        </a>
+                      </div>
+  
+                      {% if request.user == bid.bidder and offer.active %}
+                      <a href="{% url 'delete-bid' bid.id %}">
+                      <div class="thread__delete">
+                          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                          <title>remove</title>
+                          <path
+                              d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z">
+                          </path>
+                          </svg>
+                      </div>
+                      </a>
+                      {% endif %}
+                  </div>
+                  <div class="thread__details">
+                      {{bid.price}}
+                      <br>
+                      {{bid.time_of_delivery}}
+                  </div>
+                  </div>
+                {%endfor%}
+              {% else %}
+                {% for bid in offer_bids %}
+                  <div class="thread">
+                    {% if request.user == offer.host %}
+                    <form action="{% url 'accept-bid' bid.id %}" method="POST">
+                      {% csrf_token %}
+                      <button class="btn btn--accept_bid" type="submit" title='Accept bid'>
+                          Accept
+                      </button> 
+                    </form>
+                    {%endif%}
+                    <div class="thread__top">
+                        <div class="thread__author">
+                          <a href="{% url 'users-profile' bid.bidder.username %}" class="thread__authorInfo">
+                            <div class="avatar avatar--medium">
+                              <img src="{{bid.bidder.avatar.url}}" />
+                            </div>
+                            <span>{{bid.bidder.username}}</span>
+                          </a>
                         </div>
-                        <span>{{bid.bidder.username}}</span>
-                    </a>
-                    {% load split %}
-                    <span class="thread__date">{{bid.created|timesince|split}} ago</span>
+
+                        {% if request.user == bid.bidder and offer.active %}
+                        <a href="{% url 'delete-bid' bid.id %}">
+                        <div class="thread__delete">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                            <title>remove</title>
+                            <path
+                                d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z">
+                            </path>
+                            </svg>
+                        </div>
+                        </a>
+                        {% endif %}
                     </div>
-    
-                    {% if request.user == bid.bidder %}
-                    <a href="{% url 'delete-bid' bid.id %}">
-                    <div class="thread__delete">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-                        <title>remove</title>
-                        <path
-                            d="M27.314 6.019l-1.333-1.333-9.98 9.981-9.981-9.981-1.333 1.333 9.981 9.981-9.981 9.98 1.333 1.333 9.981-9.98 9.98 9.98 1.333-1.333-9.98-9.98 9.98-9.981z">
-                        </path>
-                        </svg>
+                    <div class="thread__details">
+                        {{bid.price}}
+                        <br>
+                        {{bid.time_of_delivery}}
                     </div>
-                    </a>
-                    {% endif %}
-                </div>
-                <div class="thread__details">
-                    {{bid.price}}
-                    <br>
-                    {{bid.time_of_delivery}}
-                </div>
-                </div>
+                  </div>
                 {% endfor %}
+              {%endif%}
             </div>
         </div>
+        <div class="room__message">
+          {% if offer.active %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input name="price" placeholder="enter your price here..." type="number"/>
+                <input name="time_of_delivery" type="datetime-local" />
+                <button class="btn btn--bid" type="submit">
+                  <h2>Add bid</h2>
+                </button>
+            </form>
+          {% else %}
+            <button class="btn btn--bid" style="cursor:default"> 
+              <h2>Offer Closed</h2>
+            </button>
+          {% endif %}
+        </div>
 
-
-        
-    
-    
       </div>
+
+
       <!--  End -->
     </div>
   </main>

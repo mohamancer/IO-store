@@ -16,23 +16,22 @@
 
         <form class="form" action="" method="POST">
           {% csrf_token %}
+          {% for field in login_form %}
           <div class="form__group form__group">
-            <label for="room_name">Username</label>
-            <input id="username" name="username" type="username" placeholder="Enter Username" />
+            <label for="room_name">{{field.label}}</label>
+            {{field}}
           </div>
-          <div class=" form__group">
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password"
-              placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
-              {% if messages %}
-              <ul class="messages">
-                  {% for message in messages %}
-                  <br/>
-                  <li>{{ message }}</li>
-                  {% endfor %}
-              </ul>
-              {% endif %}
+          {% endfor %}
+          {% if messages %}
+          <div>
+            <ul class="messages">
+            {% for message in messages %}
+              <br/>
+              <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
           </div>
+          {% endif %}
           <p align="center">
             <button class="btn btn--main" type="submit">
               <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
@@ -58,7 +57,7 @@
   </div>
   {% else %}
   <div class="container">
-    <div class="layout__box">
+    <div class="layout__box__reg">
       <div class="layout__boxHeader">
         <div class="layout__boxTitle">
           <h3>Register</h3>

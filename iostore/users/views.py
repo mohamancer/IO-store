@@ -2,36 +2,38 @@ from django.shortcuts import render , redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
-from .forms import my_user_creation_form, update_user_form
+from offer.models import Category, Offer
+from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 # Create your views here.
 
 
 def login_page(request):
     page = 'users-login'
+    login_form = user_login_form()
+
     if request.user.is_authenticated:
         return redirect('feed-home')
 
     if request.method == 'POST':
-        username = request.POST.get('username').lower()
-        password = request.POST.get('password')
+        login_form = user_login_form(request.POST)
+        if login_form.is_valid():
+            username = request.POST.get('username').lower()
+            password = request.POST.get('password')
 
-        # try:
-        #     user = User.objects.get(username=username)
-        # except:
-        #     print("here")
-        #     messages.error(request, 'User does not exist')
+            user = authenticate(request, username=username, password=password)
 
-        user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('feed-home')
+            else:
+                messages.error(request, 'Username OR password does not exit')
+        else:  
+            messages.error(request, 'An error occurred during login')
 
-        if user is not None:
-            login(request, user)
-            return redirect('feed-home')
-        else:
-            messages.error(request, 'Username OR password does not exit')
-
-    context = {'page': page}
+    context = {'page': page, 'login_form': login_form}
     return render(request, 'users/login_register.html' , context)
 
 def logout_user(request):
@@ -69,8 +71,34 @@ def update_profile(request):
     return render(request, 'users/update_profile.html', {'form': form})
 
 def profile_page(request, pk):
+    categories = Category.objects.all()
+    all_offers_count = 0
+    temp = Offer.objects.all().order_by('-created')
+    offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
+                                                            .order_by('final_bid__time_of_delivery')
+    offers = []
+    for offer in temp:
+        if offer.host.username == pk:
+            offers.append(offer)
+
+    bids_per_offer = {}
+    for offer in offers:
+        bids = offer.bid_set.all()
+        bids_per_offer[offer.id]= len(bids)
+
+    category_to_count = {}
+    q1 = Offer.objects.all()
+    for c in categories:
+        cnt = q1.filter(category__id = c.id, active = True).count()
+        if cnt != 0:
+            category_to_count[c] = cnt
+            all_offers_count += cnt
+
+
     user = User.objects.get(username=pk)
-    context = {'user': user}
+    context = {'user': user, 'category_to_count': category_to_count,
+                'all_offers_count': all_offers_count,'offers': offers,
+                 'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received}
     return render(request, 'users/profile.html', context)
 
 

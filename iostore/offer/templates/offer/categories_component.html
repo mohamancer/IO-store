@@ -6,9 +6,10 @@
         <li>
             <a href="{% url 'feed-home' %}" class="active">All <span>{{all_offers_count}}</span></a>
         </li>
-        {% for category in categories %}
+        {% load dict_key %}
+        {% for category in category_to_count %}
         <li>
-            <a href="{% url 'feed-home' %}?q={{category.name}}">{{category.name}}<span>{{category.offer_set.all.count}}</span></a>
+            <a href="{% url 'feed-home' %}?q={{category.name}}">{{category.name}}<span>{{category_to_count|dict_key:category}}</span></a>
         </li>
         {% endfor %}
     </ul>

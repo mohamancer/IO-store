@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -10,8 +9,7 @@ from .models import Offer, Category, Bid
 
 def offer(request, pk):
     offer = Offer.objects.get(id=pk)
-    offer_bids = offer.bid_set.all()
-    # participants = room.participants.all()
+    offer_bids = offer.bid_set.all().order_by('-created')
 
     if request.method == 'POST':
         bid = Bid.objects.create(
@@ -89,8 +87,27 @@ def deleteBid(request, pk):
 
     if request.user != bid.bidder:
         return HttpResponse('Your are not allowed here!!')
-
     if request.method == 'POST':
         bid.delete()
+        remaining_bids = Bid.objects.all().filter(offer = bid.offer)
+        mn = float('inf')
+        for remaning_bid in remaining_bids:
+            mn = min(mn , remaning_bid.price)
+        bid.offer.lowest_bid = mn
+        if mn == float('inf'):
+            bid.offer.lowest_bid = -1
+        bid.offer.save()
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': bid})
+
+@login_required(login_url='users-login')
+def acceptBid(request, pk):
+    bid = Bid.objects.get(id=pk)
+    if request.user != bid.offer.host:
+        return HttpResponse('Your are not allowed here!!')
+
+    if request.method == 'POST':
+        bid.offer.final_bid = bid
+        bid.offer.active = False
+        bid.offer.save()
+    return redirect('offer', pk=bid.offer.id)
