@@ -1,6 +1,5 @@
-import py_compile
 import threading
-from .models import Offer, Bid
+from .models import Offer
 from django.utils import timezone
 from time import sleep
 
