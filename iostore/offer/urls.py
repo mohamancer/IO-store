@@ -6,7 +6,7 @@ from .handle_deadline import periodically_mark_offers_inactive_by_deadline_threa
 periodically_mark_offers_inactive_by_deadline_thread()
 
 urlpatterns = [
-    path('offer/<str:pk>/',views.offer, name="offer"),
+    path('offer/<str:pk>/', views.offer, name="offer"),
     path('create-offer/', views.createOffer, name="create-offer"),
     path('update-offer/<str:pk>/', views.updateOffer, name="update-offer"),
     path('delete-offer/<str:pk>/', views.deleteOffer, name="delete-offer"),

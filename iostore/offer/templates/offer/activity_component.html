@@ -7,7 +7,7 @@
             {%if request.user == offer.final_bid.bidder%}
                 <div class="activities__box">
                     <div class="activities__boxHeader roomListRoom__header">
-                        <a href="{% url 'users-profile' request.user.id %}" class="roomListRoom__author">
+                        <a href="{% url 'users-profile' request.user.username %}" class="roomListRoom__author">
                             <div class="avatar avatar--small">
                                 <img src="{{request.user.avatar.url}}" />
                             </div> 
@@ -16,7 +16,7 @@
                     </div>
                     <div class="activities__boxContent">
                         <p>
-                            your bid on <a href="{% url 'users-profile' offer.host.id %}">{{offer.host.username}}'s</a>
+                            your bid on <a href="{% url 'users-profile' offer.host.username %}">{{offer.host.username}}'s</a>
                             offer <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be delivered on {{offer.final_bid.time_of_delivery}}
                         </p>
@@ -30,11 +30,13 @@
         <div class="activities__header">
             <h2>Offers to be recieved</h2>
         </div>
+        
         {% for offer in offers_to_be_delivered_and_received %}
             {%if request.user == offer.host%}
+
                 <div class="activities__box">
                     <div class="activities__boxHeader roomListRoom__header">
-                        <a href="{% url 'users-profile' request.user.id %}" class="roomListRoom__author">
+                        <a href="{% url 'users-profile' request.user.username %}" class="roomListRoom__author">
                             <div class="avatar avatar--small">
                                 <img src="{{request.user.avatar.url}}" />
                             </div> 
@@ -43,8 +45,8 @@
                     </div>
                     <div class="activities__boxContent">
                         <p>
-                            <a href="{% url 'users-profile' offer.final_bid.bidder.id %}">{{offer.final_bid.bidder.username}}'s</a>
-                            bid on your offer <a href="{% url 'offer' offer.host.id %}">{{offer}}</a>
+                            <a href="{% url 'users-profile' offer.final_bid.bidder.username %}">{{offer.final_bid.bidder.username}}'s</a>
+                            bid on your offer <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be received on {{offer.final_bid.time_of_delivery}}
                         </p>
                     </div>

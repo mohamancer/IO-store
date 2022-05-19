@@ -172,16 +172,26 @@
         </div>
         <div class="room__message">
           {% if offer.active %}
-            <form action="" method="POST">
-                {% csrf_token %}
-                <input name="price" placeholder="enter your price here..." type="number"/>
-                <input name="time_of_delivery" type="datetime-local" />
-                <button class="btn btn--bid" type="submit">
-                  <h2>Add bid</h2>
-                </button>
-            </form>
+            
+              <form action="" method="POST">
+                  {% csrf_token %}
+                  <input name="price" placeholder="enter your price here..." type="number"/>
+                  <input name="time_of_delivery" type="datetime-local" 
+                          max='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'
+                          min='{% now "Y-m-d" %}T{% now "H:i" %}'/>
+                  {% if request.user == offer.host%}
+                    <button class="btn btn--bid" id='btnbid' type="button" onclick='showAlert()'
+                     title="You can't bid on your own offer">
+                      <h2>Add bid</h2>
+                    </button>
+                  {%else%}
+                    <button class="btn btn--bid" type="submit">
+                      <h2>Add bid</h2>
+                    </button>
+                  {%endif%}
+              </form>
           {% else %}
-            <button class="btn btn--bid" style="cursor:default"> 
+            <button class="btn btn--closed" style="cursor:default"> 
               <h2>Offer Closed</h2>
             </button>
           {% endif %}

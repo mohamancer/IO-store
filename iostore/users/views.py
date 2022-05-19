@@ -1,13 +1,10 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 from offer.models import Category, Offer
 from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-
-# Create your views here.
 
 
 def login_page(request):
@@ -30,11 +27,12 @@ def login_page(request):
                 return redirect('feed-home')
             else:
                 messages.error(request, 'Username OR password does not exit')
-        else:  
+        else:
             messages.error(request, 'An error occurred during login')
 
     context = {'page': page, 'login_form': login_form}
-    return render(request, 'users/login_register.html' , context)
+    return render(request, 'users/login_register.html', context)
+
 
 def logout_user(request):
     logout(request)
@@ -57,6 +55,7 @@ def register_page(request):
 
     return render(request, 'users/login_register.html', {'form': form})
 
+
 @login_required(login_url='users-login')
 def update_profile(request):
     user = request.user
@@ -70,10 +69,13 @@ def update_profile(request):
 
     return render(request, 'users/update_profile.html', {'form': form})
 
+
 def profile_page(request, pk):
     categories = Category.objects.all()
     all_offers_count = 0
     temp = Offer.objects.all().order_by('-created')
+    offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
+        .order_by('final_bid__time_of_delivery')
     offers = []
     for offer in temp:
         if offer.host.username == pk:
@@ -82,20 +84,18 @@ def profile_page(request, pk):
     bids_per_offer = {}
     for offer in offers:
         bids = offer.bid_set.all()
-        bids_per_offer[offer.id]= len(bids)
+        bids_per_offer[offer.id] = len(bids)
 
     category_to_count = {}
     q1 = Offer.objects.all()
     for c in categories:
-        cnt = q1.filter(category__id = c.id, active = True).count()
+        cnt = q1.filter(category__id=c.id, active=True).count()
         if cnt != 0:
             category_to_count[c] = cnt
             all_offers_count += cnt
 
-
     user = User.objects.get(username=pk)
-    context = {'user': user, 'category_to_count': category_to_count, 'all_offers_count': all_offers_count, 'offers': offers, 'bids_per_offer': bids_per_offer}
+    context = {'user': user, 'category_to_count': category_to_count,
+               'all_offers_count': all_offers_count, 'offers': offers,
+               'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received}
     return render(request, 'users/profile.html', context)
-
-
-    

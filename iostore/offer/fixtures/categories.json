@@ -1,0 +1,100 @@
+[
+    {
+        "model": "offer.category",
+        "pk": 1,
+        "fields": {
+            "name": "Vehicles"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 2,
+        "fields": {
+            "name": "Electronics"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 3,
+        "fields": {
+            "name": "Collectibles & Art"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 4,
+        "fields": {
+            "name": "Home & Garden"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 5,
+        "fields": {
+            "name": "Clothing, Shoes & Accessories"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 6,
+        "fields": {
+            "name": "Toys & Hobbies"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 7,
+        "fields": {
+            "name": "Sporting Goods"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 8,
+        "fields": {
+            "name": "Books, Movies & Music"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 9,
+        "fields": {
+            "name": "Health & Beauty"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 10,
+        "fields": {
+            "name": "Business & Industrial"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 11,
+        "fields": {
+            "name": "Jewelry & Watches"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 12,
+        "fields": {
+            "name": "Baby Essentials"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 13,
+        "fields": {
+            "name": "Pet Supplies"
+        }
+    },
+    {
+        "model": "offer.category",
+        "pk": 14,
+        "fields": {
+            "name": "Others"
+        }
+    }
+]
