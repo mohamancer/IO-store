@@ -38,8 +38,17 @@ localhost:8000
 ```
 
 ### How to Update DB?
-TODO: Complete Instructions
-
+In order to create an initial db we will use [fixtures](https://docs.djangoproject.com/en/4.0/howto/initial-data/)
+#### Example for creating and loading users.User fixture:
+* Add users via registration in the site
+* run the following command:
+```bash
+py .\manage.py dumpdata -o users/fixtures/users.json users
+```
+* in order to load this fixture to an empty db run the command:
+```bash
+py .\manage.py loaddata users
+```
 ### Tips
 
 * When you start a new app with `Django` don't forget to add it to `apps.py` file and add the name of the class to the `INSTALLED_APP`.
