@@ -23,6 +23,8 @@ urlpatterns = [
     path('', include('feed.urls')),
     path('users/', include('users.urls')),
     path('', include('offer.urls')),
+    path('', include('recommendation_system.urls')),
+
 ]
 
 if settings.DEBUG:
