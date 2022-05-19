@@ -822,8 +822,8 @@ input::-webkit-inner-spin-button {
   font-size: 1.4rem;
 }
 
-.activities__boxContent a:hover {
-  text-decoration: underline;
+.activities__boxContent a {
+  text-transform: capitalize;
 }
 
 .activities__boxRoomContent {

@@ -99,7 +99,7 @@ def deleteBid(request, pk):
         if mn == float('inf'):
             bid.offer.lowest_bid = -1
         bid.offer.save()
-        return redirect('feed-home')
+        return redirect('offer', pk=bid.offer.id)
     return render(request, 'offer/delete.html', {'obj': bid})
 
 
