@@ -1,10 +1,10 @@
 from django.urls import path
 from . import views
 
-from .calc_score import get_highest_rated_offers
-tplist = [(0,5), (4, 1), (5,1)]
+from .update_score_matrix import score_matrix_handler_thread
 
-print(get_highest_rated_offers(tplist))
+score_matrix_handler_thread()
+#print(get_highest_rated_offers(tplist))
 
 
 urlpatterns = [
