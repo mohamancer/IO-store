@@ -112,5 +112,22 @@ def favorite_add(request, id):
 
 @ login_required
 def favorite_list(request):
-    new = Offer.objects.filter(favorites=request.user)
-    return render(request, 'users/favorites.html', {'new': new})
+    offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
+        .order_by('final_bid__time_of_delivery')
+    offers = Offer.objects.filter(favorites=request.user).order_by('-created')
+    categories = Category.objects.all()
+    all_offers_count = 0
+    category_to_count = {}
+    q1 = Offer.objects.all()
+    for c in categories:
+        cnt = q1.filter(category__id=c.id, active=True).count()
+        if cnt != 0:
+            category_to_count[c] = cnt
+            all_offers_count += cnt
+    bids_per_offer = {}
+    offer_count = 0
+    for offer in offers:
+        offer_count += 1
+        local_bids = offer.bid_set.all()
+        bids_per_offer[offer.id] = len(local_bids)
+    return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,'all_offers_count': all_offers_count})

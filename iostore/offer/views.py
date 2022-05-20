@@ -8,7 +8,11 @@ from .models import Offer, Category, Bid
 def offer(request, pk):
     offer = Offer.objects.get(id=pk)
     offer_bids = offer.bid_set.all().order_by('-created')
-
+    fav_off = Offer.objects.filter(favorites=request.user)
+    if offer in fav_off:
+        is_in_fav = True
+    else:
+        is_in_fav = False
     if request.method == 'POST':
         bid = Bid.objects.create(
             bidder=request.user,
@@ -24,7 +28,7 @@ def offer(request, pk):
         offer.save()
         return redirect('offer', pk=offer.id)
 
-    context = {'offer': offer, 'offer_bids': offer_bids}
+    context = {'offer': offer, 'offer_bids': offer_bids, 'is_in_fav': is_in_fav}
     return render(request, 'offer/offer.html', context)
 
 
