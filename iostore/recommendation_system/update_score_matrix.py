@@ -12,6 +12,8 @@ matrix_df = pd.DataFrame()
 last_updated = 0
 s = set() # this set contains tuples of (user , offer) meaning the user already bidded on offer
 
+prediction_matrix = pd.DataFrame()
+
 def init_matrix():
     global s
     global matrix_df
@@ -43,7 +45,7 @@ def add_bids(new_bids):
         bidder_id = bid.bidder.id - 1
         offer_id = bid.offer.id - 1
         if (bidder_id,offer_id) not in s:
-            matrix_df[bidder_id][offer_id] += 2.0
+            matrix_df[offer_id][bidder_id] += 2.0 #first [] should hold COLUMN INDEX and second ROW INDEX
             s.add((bidder_id,offer_id))
 
 def update_matrix():
@@ -52,6 +54,7 @@ def update_matrix():
     global matrix_df
     global last_updated
     while True:
+        print(matrix_df)
         new_users = User.objects.filter(date_joined__gte=last_updated)
         new_offers = Offer.objects.filter(created__gte=last_updated)
         new_bids = Bid.objects.filter(created__gte=last_updated)
@@ -60,6 +63,7 @@ def update_matrix():
         add_bids(new_bids)
 
         last_updated = timezone.now()
+        #print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
         sleep(10)
 
 # def naiv_update_matrix():
@@ -73,6 +77,10 @@ def update_matrix():
 #         matrix_df = init_matrix()
 #         #print(get_highest_rated_offers(matrix_df[5],matrix_df))
 #         sleep(10)
+
+
+
+
 
 def score_matrix_handler_thread():
     global matrix_df
