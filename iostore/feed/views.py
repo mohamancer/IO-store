@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 from offer.models import Offer, Bid, Category
 import recommendation_system.calc_score
-import recommendation_system.update_score_matrix
 
 def home(request):
     bids = Bid.objects.all().order_by('-created')[0:2]
@@ -24,11 +23,13 @@ def home(request):
             all_offers_count += cnt
 
     if q.lower() == "recommended":
+        import recommendation_system.update_score_matrix
         user_id = request.user.id - 1
         best_match_ids = recommendation_system.calc_score.get_highest_rated_offers(recommendation_system.update_score_matrix.matrix_df.iloc[user_id],recommendation_system.update_score_matrix.matrix_df)
         offers = []
         for offer_id in best_match_ids:
             offers.append(Offer.objects.get(id = offer_id))
+        #print(offers)
 
     elif q in category_names:
         offers = Offer.objects.filter(
