@@ -18,11 +18,10 @@ def get_highest_rated_offers(user_ratings , matrix_df):
             new_row = row - row.mean()
         return new_row
     
-    def get_similar(movie_name,rating):
-        similar_score = corrMatrix[movie_name]*(rating)
-        similar_score = similar_score.sort_values(ascending=False)
-        #print(type(similar_ratings))
-        return similar_score
+    def get_score(movie_name,rating):
+        score = corrMatrix[movie_name]*(rating)
+        score = score.sort_values(ascending=False)
+        return score
     
     ratings=matrix_df
     ratings.fillna(0, inplace=True)
@@ -34,12 +33,14 @@ def get_highest_rated_offers(user_ratings , matrix_df):
     corrMatrix = ratings.corr(method='pearson')
 
     user_ratings = two_col_data_frame_to_list_of_tuples(pd.DataFrame(user_ratings))
-    similar_scores = pd.DataFrame()
-    for movie,rating in user_ratings:
-        similar_scores = similar_scores.append(get_similar(movie,rating),ignore_index = True)
-    return similar_scores.sum().sort_values(ascending=False)
-
-    # print(similar_scores.head(10))
+    result = pd.DataFrame()
+    for offer_id,rating in user_ratings:
+        result = result.append(get_score(offer_id,rating),ignore_index = True)
+    result = result.sum().sort_values(ascending=False)
+    result = result.index
+    result += 1
+    result = result.tolist()
+    return result
 
 # import pandas as pd
 # import numpy as np

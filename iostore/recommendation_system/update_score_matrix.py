@@ -52,7 +52,6 @@ def update_matrix():
     global matrix_df
     global last_updated
     while True:
-        print(matrix_df)
         new_users = User.objects.filter(date_joined__gte=last_updated)
         new_offers = Offer.objects.filter(created__gte=last_updated)
         new_bids = Bid.objects.filter(created__gte=last_updated)
@@ -61,7 +60,6 @@ def update_matrix():
         add_bids(new_bids)
 
         last_updated = timezone.now()
-        print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
         sleep(10)
 
 # def naiv_update_matrix():
