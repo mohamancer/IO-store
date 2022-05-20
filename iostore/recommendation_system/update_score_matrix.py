@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 from scipy import spatial
 
+
 matrix_df = pd.DataFrame()
 last_updated = 0
 s = set() # this set contains tuples of (user , offer) meaning the user already bidded on offer
@@ -25,8 +26,18 @@ def init_matrix():
         bidder_id = bid.bidder.id - 1
         offer_id = bid.offer.id - 1
         if (bidder_id,offer_id) not in s:
-            matrix[bidder_id][offer_id] += 2.0
+            matrix[bidder_id][offer_id] += 3.0
             s.add((bidder_id,offer_id))
+
+    # need to update matrix every time a user adds something to favourites!!
+    users = User.objects.all()
+    for user in users:
+        fav_offers = Offer.objects.filter(favorites=user)
+        user_id = user.id - 1
+        for fav_offer in fav_offers:
+            fav_offer_id = fav_offer.id - 1
+            matrix[user_id][fav_offer_id] += 3.0
+
     matrix_df = pd.DataFrame(matrix)
     return matrix_df
 
@@ -45,8 +56,10 @@ def add_bids(new_bids):
         bidder_id = bid.bidder.id - 1
         offer_id = bid.offer.id - 1
         if (bidder_id,offer_id) not in s:
-            matrix_df[offer_id][bidder_id] += 2.0 #first [] should hold COLUMN INDEX and second ROW INDEX
+            matrix_df[offer_id][bidder_id] += 3.0 #first [] should hold COLUMN INDEX and second ROW INDEX
             s.add((bidder_id,offer_id))
+
+
 
 def update_user_offer_matrix():
     # while true
@@ -101,9 +114,9 @@ def calc_weighted_score(j):
     for i in range(len(co_sim_matrix)): # go over all people
         if matrix_df[j][i] != 0:
             numerator += co_sim_matrix[j][i] * matrix_df[j][i]
-            #denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
+            denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
             # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
-        denominator += co_sim_matrix[j][i] / 5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
+        numerator -= co_sim_matrix[j][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
         
     if denominator != 0:
         return (numerator / denominator)

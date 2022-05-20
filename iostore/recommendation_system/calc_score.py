@@ -98,16 +98,16 @@ import numpy as np
 
 
 def get_recommanded_offers_ids(user_id):
-    from .update_score_matrix import prediction_matrix,matrix_df
+    from .update_score_matrix import prediction_matrix
     index = user_id - 1
-
-    print(matrix_df)
 
     #res = np.sort(prediction_matrix.iloc[index].values, axis=-1, kind='quicksort', order=None)[::-1]
     #res = res.tolist()
     # return res
     dic = dict()
     i = 1
+    print(prediction_matrix)
+    print(prediction_matrix.iloc[index].values.tolist())
     for value in prediction_matrix.iloc[index].values:
         if value not in dic:
             dic[value] = [i]
@@ -122,6 +122,7 @@ def get_recommanded_offers_ids(user_id):
         for b in a:
             res.append(b)
     res = res[::-1]
+    print(res)
     return res
 
     # print(matrix_df)
