@@ -5,7 +5,7 @@ from django.utils import timezone
 from time import sleep
 import numpy as np
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
+from scipy import spatial
 
 matrix_df = pd.DataFrame()
 last_updated = 0
@@ -79,17 +79,15 @@ def update_user_offer_matrix():
 #         sleep(10)
 
 
-def construct_cos_similar_matrix():
+def construct_cos_similar_matrix(): #this can probably be done more efficiently
     global matrix_df
     global co_sim_matrix
-    co_sim_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df.iloc[0]))))
-    for i in range(len(prediction_matrix)):
-        for j in range(len(prediction_matrix.iloc(0))):
-           co_sim_matrix[j][i]
+    co_sim_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df))))
+    for i in range(len(matrix_df)):
+        for j in range(len(matrix_df)):
+            co_sim_matrix[j][i] = 1 - spatial.distance.cosine(matrix_df.iloc[i].tolist(), matrix_df.iloc[j].tolist())
 
     #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
-    #print(co_sim_matrix)
-
     return co_sim_matrix
 
 def calc_weighted_score(j):
@@ -115,7 +113,7 @@ def construct_prediction_matrix():
     global co_sim_matrix
     global prediction_matrix
     # co_sim_matrix is of same size like matrix_df
-    prediction_matrix = pd.DataFrame(np.zeros((len(co_sim_matrix), len(co_sim_matrix.iloc[0])))) 
+    prediction_matrix = pd.DataFrame(np.zeros((len(co_sim_matrix), len(co_sim_matrix.iloc[0]))))
     for i in range(len(prediction_matrix)):
         for j in range(len(prediction_matrix.iloc[0])):
             if matrix_df[j][i] != 0:
@@ -130,7 +128,7 @@ def construct_all_matrices():
 def update_prediction_and_cos_matrices():
     while True:
         construct_all_matrices()
-        sleep(10)
+        sleep(20)
 
 
 def matrices_handler_thread():
