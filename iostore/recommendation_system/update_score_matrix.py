@@ -5,13 +5,13 @@ from django.utils import timezone
 from time import sleep
 import numpy as np
 import pandas as pd
-
-from .calc_score import get_highest_rated_offers
+from sklearn.metrics.pairwise import cosine_similarity
 
 matrix_df = pd.DataFrame()
 last_updated = 0
 s = set() # this set contains tuples of (user , offer) meaning the user already bidded on offer
 
+co_sim_matrix = []
 prediction_matrix = pd.DataFrame()
 
 def init_matrix():
@@ -48,13 +48,13 @@ def add_bids(new_bids):
             matrix_df[offer_id][bidder_id] += 2.0 #first [] should hold COLUMN INDEX and second ROW INDEX
             s.add((bidder_id,offer_id))
 
-def update_matrix():
+def update_user_offer_matrix():
     # while true
     # filters offers, users, and bids made after a certain date
     global matrix_df
     global last_updated
     while True:
-        print(matrix_df)
+        #print(matrix_df)
         new_users = User.objects.filter(date_joined__gte=last_updated)
         new_offers = Offer.objects.filter(created__gte=last_updated)
         new_bids = Bid.objects.filter(created__gte=last_updated)
@@ -66,7 +66,7 @@ def update_matrix():
         #print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
         sleep(10)
 
-# def naiv_update_matrix():
+# def naiv_update_user_offer_matrix():
 #     #working
 #     global matrix_df
 #     global last_updated
@@ -79,13 +79,67 @@ def update_matrix():
 #         sleep(10)
 
 
+def construct_cos_similar_matrix():
+    global matrix_df
+    global co_sim_matrix
+    co_sim_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df.iloc[0]))))
+    for i in range(len(prediction_matrix)):
+        for j in range(len(prediction_matrix.iloc(0))):
+           co_sim_matrix[j][i]
+
+    #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
+    #print(co_sim_matrix)
+
+    return co_sim_matrix
+
+def calc_weighted_score(j):
+    global co_sim_matrix
+    global matrix_df
+    global prediction_matrix
+    # j is the offer
+    # i is the user
+    numerator = 0
+    denominator = 0
+    for i in range(len(co_sim_matrix)): # go over all people
+        if matrix_df[j][i] != 0:
+            numerator += co_sim_matrix[j][i] * matrix_df[j][i]
+            denominator += co_sim_matrix[j][i]
+
+    if denominator != 0:
+        return (numerator / denominator)
+    else: # if there are no users who rated this offer, deominator will be 0
+        return 0
+
+def construct_prediction_matrix():
+    global matrix_df
+    global co_sim_matrix
+    global prediction_matrix
+    # co_sim_matrix is of same size like matrix_df
+    prediction_matrix = pd.DataFrame(np.zeros((len(co_sim_matrix), len(co_sim_matrix.iloc[0])))) 
+    for i in range(len(prediction_matrix)):
+        for j in range(len(prediction_matrix.iloc[0])):
+            if matrix_df[j][i] != 0:
+                prediction_matrix[j][i] = matrix_df[j][i]
+            else:
+                prediction_matrix[j][i] = calc_weighted_score(j)
+
+def construct_all_matrices():
+    construct_cos_similar_matrix()
+    construct_prediction_matrix()
+
+def update_prediction_and_cos_matrices():
+    while True:
+        construct_all_matrices()
+        sleep(10)
 
 
-
-def score_matrix_handler_thread():
+def matrices_handler_thread():
     global matrix_df
     global last_updated
     matrix_df = init_matrix()
     last_updated = timezone.now()
-    update_thread = threading.Thread(target=update_matrix, name='update_thread', daemon=True)
-    update_thread.start()
+    user_offer_update_thread = threading.Thread(target=update_user_offer_matrix, name='user_offer_update_thread', daemon=True)
+    user_offer_update_thread.start()
+
+    prediction_and_cos_matrices_thread = threading.Thread(target=update_prediction_and_cos_matrices, name='user_offer_update_thread',daemon=True)
+    prediction_and_cos_matrices_thread.start()
