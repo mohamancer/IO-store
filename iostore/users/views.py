@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
@@ -99,3 +100,34 @@ def profile_page(request, pk):
                'all_offers_count': all_offers_count, 'offers': offers,
                'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received}
     return render(request, 'users/profile.html', context)
+
+@ login_required
+def favorite_add(request, id):
+    post = get_object_or_404(Offer, id=id)
+    if post.favorites.filter(id=request.user.id).exists():
+        post.favorites.remove(request.user)
+    else:
+        post.favorites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@ login_required
+def favorite_list(request):
+    offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
+        .order_by('final_bid__time_of_delivery')
+    offers = Offer.objects.filter(favorites=request.user).order_by('-created')
+    categories = Category.objects.all()
+    all_offers_count = 0
+    category_to_count = {}
+    q1 = Offer.objects.all()
+    for c in categories:
+        cnt = q1.filter(category__id=c.id, active=True).count()
+        if cnt != 0:
+            category_to_count[c] = cnt
+            all_offers_count += cnt
+    bids_per_offer = {}
+    offer_count = 0
+    for offer in offers:
+        offer_count += 1
+        local_bids = offer.bid_set.all()
+        bids_per_offer[offer.id] = len(local_bids)
+    return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,'all_offers_count': all_offers_count})

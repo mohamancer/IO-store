@@ -7,4 +7,6 @@ urlpatterns = [
     path('logout/', views.logout_user, name="users-logout"),
     path('profile/<str:pk>/', views.profile_page, name="users-profile"),
     path('update-profile/', views.update_profile, name="update-profile"),
+    path('fav/<int:id>/', views.favorite_add, name='favorite_add'),
+    path('favorites/', views.favorite_list, name='favorite_list')
 ]

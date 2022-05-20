@@ -22,10 +22,11 @@ class Offer(models.Model):
     lowest_bid = models.FloatField(default=-1)
     host = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
-
+    reviewed_by_host = models.BooleanField(default=False)
+    reviewed_by_bidder = models.BooleanField(default=False)
     bidding_deadline = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
-
+    favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
