@@ -24,8 +24,9 @@ def home(request):
 
     if q.lower() == "recommended":
         import recommendation_system.update_score_matrix
-        user_id = request.user.id - 1
-        best_match_ids = recommendation_system.calc_score.get_recommanded_offers_ids(recommendation_system.update_score_matrix.matrix_df.iloc[user_id],recommendation_system.update_score_matrix.matrix_df)
+        user_id = request.user.id
+        best_match_ids = recommendation_system.calc_score.get_recommanded_offers_ids(user_id)
+        print(best_match_ids)
         offers = []
         for offer_id in best_match_ids:
             offers.append(Offer.objects.get(id = offer_id))

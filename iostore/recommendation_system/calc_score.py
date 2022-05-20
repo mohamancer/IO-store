@@ -1,7 +1,6 @@
 import pandas as pd
 from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
-from .update_score_matrix import prediction_matrix
 import numpy as np
 
 # def two_col_data_frame_to_list_of_tuples(user_ratings):
@@ -99,7 +98,36 @@ import numpy as np
 
 
 def get_recommanded_offers_ids(user_id):
-    user_id = user_id - 1
-    res = np.sort(prediction_matrix.iloc[user_id].values, axis=-1, kind='quicksort', order=None)[::-1]
-    res = res.tolist()
+    from .update_score_matrix import prediction_matrix,matrix_df
+    index = user_id - 1
+
+    print(matrix_df)
+
+    #res = np.sort(prediction_matrix.iloc[index].values, axis=-1, kind='quicksort', order=None)[::-1]
+    #res = res.tolist()
+    # return res
+    dic = dict()
+    i = 1
+    for value in prediction_matrix.iloc[index].values:
+        if value not in dic:
+            dic[value] = [i]
+        else:
+            dic[value].append(i)
+        i+=1
+    
+    key_list = sorted(dic.keys())
+    res = []
+    for key in key_list:
+        a = dic[key]
+        for b in a:
+            res.append(b)
+    res = res[::-1]
     return res
+
+    # print(matrix_df)
+    # print("-----------------------------------")
+    # print("-----------------------------------")
+    # print("-----------------------------------")
+    # print("-----------------------------------")
+    # print(prediction_matrix)
+    # print(index)

@@ -96,13 +96,15 @@ def calc_weighted_score(j):
     global prediction_matrix
     # j is the offer
     # i is the user
-    numerator = 0
-    denominator = 0
+    numerator = 0.0
+    denominator = 0.0
     for i in range(len(co_sim_matrix)): # go over all people
         if matrix_df[j][i] != 0:
             numerator += co_sim_matrix[j][i] * matrix_df[j][i]
-            denominator += co_sim_matrix[j][i]
-
+            #denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
+            # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
+        denominator += co_sim_matrix[j][i] / 5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
+        
     if denominator != 0:
         return (numerator / denominator)
     else: # if there are no users who rated this offer, deominator will be 0
@@ -113,7 +115,7 @@ def construct_prediction_matrix():
     global co_sim_matrix
     global prediction_matrix
     # co_sim_matrix is of same size like matrix_df
-    prediction_matrix = pd.DataFrame(np.zeros((len(co_sim_matrix), len(co_sim_matrix.iloc[0]))))
+    prediction_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df.iloc[0]))))
     for i in range(len(prediction_matrix)):
         for j in range(len(prediction_matrix.iloc[0])):
             if matrix_df[j][i] != 0:
@@ -124,6 +126,8 @@ def construct_prediction_matrix():
 def construct_all_matrices():
     construct_cos_similar_matrix()
     construct_prediction_matrix()
+
+    #print(prediction_matrix)
 
 def update_prediction_and_cos_matrices():
     while True:
@@ -139,5 +143,5 @@ def matrices_handler_thread():
     user_offer_update_thread = threading.Thread(target=update_user_offer_matrix, name='user_offer_update_thread', daemon=True)
     user_offer_update_thread.start()
 
-    prediction_and_cos_matrices_thread = threading.Thread(target=update_prediction_and_cos_matrices, name='user_offer_update_thread',daemon=True)
+    prediction_and_cos_matrices_thread = threading.Thread(target=update_prediction_and_cos_matrices, name='update_prediction_and_cos_matrices',daemon=True)
     prediction_and_cos_matrices_thread.start()
