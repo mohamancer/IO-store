@@ -9,8 +9,11 @@ class User(AbstractUser):
     bio = models.TextField(blank=True)
     avatar = models.ImageField(
         default='avatar.svg', null=True, upload_to='images/users/')
-    rating = models.FloatField(blank=True, null=True)
-    number_of_reviews = models.IntegerField(default=0, blank=True)
+    delivery_rating = models.FloatField(default=0, blank=True)
+    delivery_number_of_reviews = models.IntegerField(default=0, blank=True)
+    receiving_rating = models.FloatField(default=0, blank=True)
+    receiving_number_of_reviews = models.IntegerField(default=0, blank=True)
+    
     is_dark_mode = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'username'
