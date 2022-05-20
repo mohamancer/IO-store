@@ -153,13 +153,13 @@ a {
   padding: 14px;
 }
 
+
 .action-button {
   background: transparent;
   border: none;
   outline: none;
   cursor: pointer;
 }
-
 
 .avatar {
   position: relative;
@@ -230,6 +230,18 @@ a {
 .scroll::-webkit-scrollbar-thumb {
   border-radius: 1rem;
   background-color: var(--color-gray);
+}
+
+.container__fav {
+  font-size: 40px;
+  text-align: center;
+  padding-top: 15px;
+}
+
+.fav__top {
+  display: flex;
+  column-gap: 1em;
+  color: var(--color-light);
 }
 
 input::-webkit-outer-spin-button,
@@ -345,7 +357,7 @@ input::-webkit-inner-spin-button {
   background: transparent;
   border: none;
   outline: none;
-  color: var(--color-light);
+  color: var(--color-gray);
 }
 
 @media screen and (max-width: 800px) {
@@ -506,6 +518,21 @@ input::-webkit-inner-spin-button {
 
 .layout__body {
   margin: 3rem;
+}
+
+.card__body {
+  background-color: var(--color-dark-light);
+  color: var(--color-light);
+  border: none;
+  outline: none;
+  border-radius: 2rem;
+  height: 15rem;
+  width: 33%;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 70%;
+  text-transform: capitalize;
 }
 
 @media screen and (max-width: 900px) {

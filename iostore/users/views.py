@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
@@ -99,3 +100,17 @@ def profile_page(request, pk):
                'all_offers_count': all_offers_count, 'offers': offers,
                'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received}
     return render(request, 'users/profile.html', context)
+
+@ login_required
+def favorite_add(request, id):
+    post = get_object_or_404(Offer, id=id)
+    if post.favorites.filter(id=request.user.id).exists():
+        post.favorites.remove(request.user)
+    else:
+        post.favorites.add(request.user)
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@ login_required
+def favorite_list(request):
+    new = Offer.objects.filter(favorites=request.user)
+    return render(request, 'users/favorites.html', {'new': new})

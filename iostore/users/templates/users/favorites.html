@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="jumbotron text-center bg-white">
+        <div class="container__fav">
+            <h1>Your Favorite Offers Page</h1>
+        </div>
+    </section>
+    <div>
+        <div class="row">
+            {% for offer in new %}
+                <a class="text-dark" href="{% url 'offer' offer.id %}">
+                    <div class="card__body">
+                        <div class="avatar avatar--medium active">
+                            <img src="{{user.avatar.url}}" />
+                        </div>
+                        <div> 
+                            <span> {{offer.host.username}} </span>
+                        </div>
+                        <div> 
+                            {{offer.title}}
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div id="favourite-section"><a href="{% url 'favorite_add' offer.id %}"
+                                class="btn btn--main" style="float: right">Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
