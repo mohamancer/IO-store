@@ -2,7 +2,7 @@ from dataclasses import fields
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm, UsernameField
-from .models import Address, User
+from .models import User
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV2Checkbox
 
@@ -30,9 +30,9 @@ class  update_address_form(ModelForm):
     latitude = forms.CharField(max_length=50, required=True, widget = forms.HiddenInput())
 
     class Meta:
-        model = Address
-        fields = '__all__'
-        exclude = ['user']
+        model = User
+        fields = ['address', 'longitude', 'latitude']
+
 
 
 class user_login_form(forms.Form):

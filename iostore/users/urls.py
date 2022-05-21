@@ -9,5 +9,5 @@ urlpatterns = [
     path('update-profile/', views.update_profile, name="update-profile"),
     path('update-address/', views.update_address, name="update-address"),
     path('fav/<int:id>/', views.favorite_add, name='favorite_add'),
-    path('favorites/', views.favorite_list, name='favorite_list')
+    path('favorites/', views.favorite_list, name='favorite_list'),
 ]
