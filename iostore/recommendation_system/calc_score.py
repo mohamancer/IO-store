@@ -2,6 +2,7 @@ import pandas as pd
 from scipy import sparse
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from offer.models import Offer
 
 # def two_col_data_frame_to_list_of_tuples(user_ratings):
 #     records = user_ratings.to_records(index=False)
@@ -99,15 +100,14 @@ import numpy as np
 
 def get_recommanded_offers_ids(user_id):
     from .update_score_matrix import prediction_matrix
-    index = user_id - 1
+    if user_id > len(prediction_matrix): # if the user is a new one, and we didnt add him to the user-offer matrix yet
+        return [(i+1) for i in range(len(Offer.objects.all()))][::-1]
 
-    #res = np.sort(prediction_matrix.iloc[index].values, axis=-1, kind='quicksort', order=None)[::-1]
-    #res = res.tolist()
-    # return res
+    index = user_id - 1
     dic = dict()
     i = 1
-    print(prediction_matrix)
-    print(prediction_matrix.iloc[index].values.tolist())
+    # print(prediction_matrix)
+    # print(prediction_matrix.iloc[index].values.tolist())
     for value in prediction_matrix.iloc[index].values:
         if value not in dic:
             dic[value] = [i]
@@ -122,13 +122,11 @@ def get_recommanded_offers_ids(user_id):
         for b in a:
             res.append(b)
     res = res[::-1]
-    print(res)
     return res
 
-    # print(matrix_df)
-    # print("-----------------------------------")
-    # print("-----------------------------------")
-    # print("-----------------------------------")
-    # print("-----------------------------------")
-    # print(prediction_matrix)
-    # print(index)
+def get_recommanded_offers(user_id):
+    best_match_ids = get_recommanded_offers_ids(user_id)
+    offers = []
+    for offer_id in best_match_ids:
+        offers.append(Offer.objects.get(id = offer_id))
+    return offers

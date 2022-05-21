@@ -71,13 +71,14 @@ def update_user_offer_matrix():
         new_users = User.objects.filter(date_joined__gte=last_updated)
         new_offers = Offer.objects.filter(created__gte=last_updated)
         new_bids = Bid.objects.filter(created__gte=last_updated)
+        
         add_offer_columns_to_matrix_df(new_users)
         add_user_rows_to_matrix_df(new_offers)
         add_bids(new_bids)
 
         last_updated = timezone.now()
         #print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
-        sleep(10)
+        sleep(120)
 
 # def naiv_update_user_offer_matrix():
 #     #working

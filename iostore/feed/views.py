@@ -31,14 +31,9 @@ def home(request):
             all_offers_count += cnt
 
     if q.lower() == "recommended":
-        import recommendation_system.update_score_matrix
         user_id = request.user.id
-        best_match_ids = recommendation_system.calc_score.get_recommanded_offers_ids(user_id)
-        offers = []
-        for offer_id in best_match_ids:
-            offers.append(Offer.objects.get(id = offer_id))
-        #print(offers)
-
+        offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
+        
     elif q in category_names:
         offers = Offer.objects.filter(
             Q(active=True) &
