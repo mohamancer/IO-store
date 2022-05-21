@@ -24,15 +24,15 @@
           <h3>{{user.username}}</h3>
         </div>
         <div class="profile__about">
-          <h3>Email</h3>
-          <p>
-            {{user.email}}
-          </p>
-        </div>
-        <div class="profile__about">
           <h3>About</h3>
           <p>
             {{user.bio}}
+          </p>
+          <p>
+            Delivery rating is {{user.delivery_rating}} out of {{user.delivery_number_of_reviews}} ratings
+          </p>
+          <p>
+            Receiving rating is {{user.receiving_rating}} out of {{user.receiving_number_of_reviews}} ratings
           </p>
         </div>
       </div>
