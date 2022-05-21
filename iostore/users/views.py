@@ -1,10 +1,11 @@
+from django.conf import Settings, settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from .models import User
+from .models import Address, User
 from offer.models import Category, Offer
-from .forms import my_user_creation_form, update_user_form, user_login_form
+from .forms import my_user_creation_form, update_address_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
 
 
@@ -131,3 +132,18 @@ def favorite_list(request):
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
     return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,'all_offers_count': all_offers_count})
+
+@login_required
+def update_address(request):
+    form = update_address_form()
+    if request.method == 'POST':
+        form = update_address_form(request.POST)
+        Address.objects.create(
+            address = form.fields.get('address'),
+            longitude = form.fields.get('longitude'),
+            latitude = form.fields.get('latitude'),
+            user = request.user
+        )
+        return redirect('users-profile', pk=request.user.username)
+
+    return render(request, 'users/update_address.html', {'form': form, 'google_api_key': settings.GOOGLE_API_KEY})

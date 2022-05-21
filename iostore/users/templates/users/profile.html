@@ -18,6 +18,7 @@
         <div class="profile__info">
           {% if request.user == user %}
           <a href="{% url 'update-profile' %}" class="btn btn--main btn--pill">Edit Profile</a>
+          <a href="{% url 'update-address' %}" class="btn btn--main btn--pill">Add Address</a>
           {% endif %}
 
           <br/>

@@ -1,6 +1,6 @@
+from ctypes import addressof
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
 
 class User(AbstractUser):
     email = models.EmailField(unique=True)
@@ -13,8 +13,16 @@ class User(AbstractUser):
     delivery_number_of_reviews = models.IntegerField(default=0, blank=True)
     receiving_rating = models.FloatField(default=0, blank=True)
     receiving_number_of_reviews = models.IntegerField(default=0, blank=True)
-    
     is_dark_mode = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
+
+class Address(models.Model):
+    address = models.CharField(verbose_name="Address",max_length=250, null=True, blank=True)
+    longitude = models.CharField(verbose_name="Longitude",max_length=50, null=True, blank=True)
+    latitude = models.CharField(verbose_name="Latitude",max_length=50, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return self.address
