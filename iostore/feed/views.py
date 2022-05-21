@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from offer.models import Offer, Bid, Category
-
+import recommendation_system.calc_score
 
 def home(request):
     bids = Bid.objects.all().order_by('-created')[0:2]
@@ -30,7 +30,12 @@ def home(request):
             category_to_count[c] = cnt
             all_offers_count += cnt
 
-    if q in category_names:
+    if q.lower() == "recommended":
+        user_id = request.user.id
+        offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
+        
+        
+    elif q in category_names:
         offers = Offer.objects.filter(
             Q(active=True) &
             Q(category__name__exact=q)
@@ -42,13 +47,18 @@ def home(request):
              Q(title__icontains=q) |
              Q(description__icontains=q))
         ).order_by('-created')
+    
 
-    offer_count = offers.count()
+    if type(offers) == type([0]):
+        offer_count = len(offers)
+    else:
+        offer_count = offers.count()
 
     bids_per_offer = {}
     for offer in offers:
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
+
 
     context = {'offers': offers, 'categories': categories,
                'offer_count': offer_count, 'bids_per_offer': bids_per_offer,
