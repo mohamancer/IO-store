@@ -203,10 +203,10 @@
             
               <form action="" method="POST">
                   {% csrf_token %}
-                  <input name="price" placeholder="enter your price here..." type="number"/>
+                  <input name="price" placeholder="enter your price here..." type="number" required/>
                   <input name="time_of_delivery" type="datetime-local" 
                           max='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'
-                          min='{% now "Y-m-d" %}T{% now "H:i" %}'/>
+                          min='{% now "Y-m-d" %}T{% now "H:i" %}' required/>
                   {% if request.user == offer.host%}
                     <button class="btn btn--bid" id='btnbid' type="button" onclick='showAlert()'
                      title="You can't bid on your own offer">
