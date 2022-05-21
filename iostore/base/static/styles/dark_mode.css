@@ -1283,7 +1283,7 @@ input::-webkit-inner-spin-button {
 }
 
 .star-ratings-css-top {
-  color: #e7711b;
+  color: #FFED85;
   padding: 0;
   position: absolute;
   z-index: 1;
@@ -1352,7 +1352,7 @@ fieldset, label { margin: 0; padding: 0; }
 
 .rating > input:checked ~ label, /* show gold star when clicked */
 .rating:not(:checked) > label:hover, /* hover current star */
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } /* hover previous stars in list */
+.rating:not(:checked) > label:hover ~ label { color: #FFED85;  } /* hover previous stars in list */
 
 .rating > input:checked + label:hover, /* hover current star when changing rating */
 .rating > input:checked ~ label:hover,
