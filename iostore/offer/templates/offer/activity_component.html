@@ -21,6 +21,15 @@
                             <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be delivered on {{offer.final_bid.time_of_delivery}}
                         </p>
+                        {% if offer.host.phone_number %}
+                        <p class="contact__right">
+                            Contact: {{offer.host.phone_number}}
+                        </p>
+                        {% else %}
+                        <p class="contact__right">
+                            Contact: {{offer.host.email}}
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
             {%endif%}
@@ -50,6 +59,15 @@
                             bid on your offer <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be received on {{offer.final_bid.time_of_delivery}}
                         </p>
+                        {% if offer.final_bid.bidder.phone_number %}
+                        <p class="contact__right">
+                            Contact: {{offer.final_bid.bidder.phone_number}}
+                        </p>
+                        {% else %}
+                        <p class="contact__right">
+                            Contact: {{offer.final_bid.bidder.email}}
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
             {%endif%}
