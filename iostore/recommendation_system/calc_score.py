@@ -1,6 +1,5 @@
 import pandas as pd
 from scipy import sparse
-from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from offer.models import Offer
 
@@ -97,6 +96,12 @@ from offer.models import Offer
 #     return result
     
 
+def clean_inactive_users(offers):
+    active_offers = []
+    for offer in offers:
+        if offer.active:
+            active_offers.append(offer)
+    return active_offers
 
 def get_recommanded_offers_ids(user_id):
     from .update_score_matrix import prediction_matrix
@@ -129,4 +134,5 @@ def get_recommanded_offers(user_id):
     offers = []
     for offer_id in best_match_ids:
         offers.append(Offer.objects.get(id = offer_id))
+    offers = clean_inactive_users(offers)
     return offers

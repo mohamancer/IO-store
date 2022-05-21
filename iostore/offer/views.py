@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import OfferForm
 from .models import Offer, Category, Bid
 
-
+@login_required(login_url='users-login')
 def offer(request, pk):
     offer = Offer.objects.get(id=pk)
     offer_bids = offer.bid_set.all().order_by('-created')

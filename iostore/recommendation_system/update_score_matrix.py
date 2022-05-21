@@ -101,7 +101,6 @@ def construct_cos_similar_matrix(): #this can probably be done more efficiently
         for j in range(len(matrix_df)):
             co_sim_matrix[j][i] = 1 - spatial.distance.cosine(matrix_df.iloc[i].tolist(), matrix_df.iloc[j].tolist())
 
-    #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
     return co_sim_matrix
 
 def calc_weighted_score(j):
