@@ -1,6 +1,8 @@
+import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+import pytz
 from .forms import OfferForm
 from .models import Offer, Category, Bid
 
@@ -13,12 +15,14 @@ def offer(request, pk):
         is_in_fav = True
     else:
         is_in_fav = False
+    
     if request.method == 'POST':
+        time_of_delivery_tz = gettimezone(request.POST.get('time_of_delivery'))
         bid = Bid.objects.create(
             bidder=request.user,
             offer=offer,
             price=request.POST.get('price'),
-            time_of_delivery=request.POST.get('time_of_delivery')
+            time_of_delivery=time_of_delivery_tz
         )
         if offer.lowest_bid == -1:
             offer.lowest_bid = float(request.POST.get('price'))
@@ -37,6 +41,7 @@ def createOffer(request):
     form = OfferForm()
     categories = Category.objects.all()
     if request.method == 'POST':
+        bidding_deadline_tz = gettimezone(request.POST.get('bidding_deadline'))
         category_name = request.POST.get('category')
         category = Category.objects.get(id=category_name)
         Offer.objects.create(
@@ -44,7 +49,7 @@ def createOffer(request):
             category=category,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            bidding_deadline=request.POST.get('bidding_deadline')
+            bidding_deadline = bidding_deadline_tz
         )
         return redirect('feed-home')
 
@@ -61,12 +66,13 @@ def updateOffer(request, pk):
         return HttpResponse('Your are not allowed here!!')
 
     if request.method == 'POST':
+        bidding_deadline_tz = gettimezone(request.POST.get('bidding_deadline'))
         category_name = request.POST.get('category')
         category = Category.objects.get(id=category_name)
         offer.title = request.POST.get('title')
         offer.category = category
         offer.description = request.POST.get('description')
-        offer.bidding_deadline = request.POST.get('bidding_deadline')
+        offer.bidding_deadline = bidding_deadline_tz 
         offer.save()
         return redirect('feed-home')
 
@@ -118,3 +124,9 @@ def acceptBid(request, pk):
         bid.offer.active = False
         bid.offer.save()
     return redirect('offer', pk=bid.offer.id)
+
+def gettimezone(date_as_string):
+    parsed_date = datetime.datetime.strptime(date_as_string, '%Y-%m-%dT%H:%M')
+    israel_timezone = pytz.timezone('Israel')
+    date_time = israel_timezone.localize(parsed_date)
+    return date_time
