@@ -88,23 +88,8 @@ def update_user_offer_matrix():
     # while true
     # filters offers, users, and bids made after a certain date
     while True:
-        print()
-        print(matrix_df)
-        print()
         update_users_offers_bids_in_matrix()
         sleep(5)
-
-# def naiv_update_user_offer_matrix():
-#     #working
-#     global matrix_df
-#     global last_updated
-#     global s
-#     while True:
-#         print(matrix_df)
-#         s = set()
-#         matrix_df = init_matrix()
-#         #print(get_highest_rated_offers(matrix_df[5],matrix_df))
-#         sleep(10)
 
 
 def construct_cos_similar_matrix(): #this can probably be done more efficiently
@@ -119,25 +104,6 @@ def construct_cos_similar_matrix(): #this can probably be done more efficiently
     #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
     return co_sim_matrix
 
-# def calc_weighted_score(j):
-#     global co_sim_matrix
-#     global matrix_df
-#     global prediction_matrix
-#     # j is the offer
-#     # i is the user
-#     numerator = 0.0
-#     denominator = 0.0
-#     for i in range(len(co_sim_matrix)): # go over all people
-#         if matrix_df[j][i] != 0:
-#             numerator += co_sim_matrix[j][i] * matrix_df[j][i]
-#             denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
-#             # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
-#         numerator -= co_sim_matrix[j][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
-        
-#     if denominator != 0:
-#         return (numerator / denominator)
-#     else: # if there are no users who rated this offer, deominator will be 0
-#         return 0
 
 def calc_weighted_score(user,offer):
     global co_sim_matrix
@@ -178,8 +144,6 @@ def construct_all_matrices():
         construct_cos_similar_matrix()
         construct_prediction_matrix()
 
-    #print(prediction_matrix)
-
 def update_prediction_and_cos_matrices():
     while True:
         construct_all_matrices()
@@ -189,12 +153,6 @@ def update_prediction_and_cos_matrices():
 def matrices_handler_thread():
     global matrix_df
     global last_updated
-    # while(True):
-    #     offers_amount = Offer.objects.all().count()
-    #     users_amount = User.objects.all().count()
-    #     if offers_amount >= 2 and users_amount >= 2:
-    #         break
-    #     sleep(5)
 
     matrix_df = init_matrix()
     last_updated = timezone.now()
