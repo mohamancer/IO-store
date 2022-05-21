@@ -24,7 +24,7 @@ def init_matrix():
     global matrix_df
     offers_amount = Offer.objects.all().count()
     users_amount = User.objects.all().count()
-    matrix = np.zeros((users_amount,offers_amount))
+    matrix = np.ones((users_amount,offers_amount))
     bid_list = Bid.objects.all()
     for bid in bid_list:
         bidder_id = bid.bidder.id - 1
@@ -48,12 +48,12 @@ def init_matrix():
 def add_offer_columns_to_matrix_df(new_offers):
     global matrix_df
     for new_offer in new_offers:
-        matrix_df.loc[len(matrix_df)] = 0.0
+        matrix_df.loc[len(matrix_df)] = 1.0
 
 def add_user_rows_to_matrix_df(new_users):
     global matrix_df
     for new_user in new_users:
-        matrix_df[len(matrix_df.columns)] = 0.0
+        matrix_df[len(matrix_df.columns)] = 1.0
 
 def add_bids(new_bids):
     for bid in new_bids:
@@ -113,7 +113,7 @@ def update_user_offer_matrix():
 def construct_cos_similar_matrix(): #this can probably be done more efficiently
     global matrix_df
     global co_sim_matrix
-    co_sim_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df))))
+    co_sim_matrix = pd.DataFrame(np.ones((len(matrix_df), len(matrix_df))))
     for i in range(len(matrix_df)):
         for j in range(len(matrix_df)):
             co_sim_matrix[j][i] = 1 - spatial.distance.cosine(matrix_df.iloc[i].tolist(), matrix_df.iloc[j].tolist())
@@ -146,13 +146,14 @@ def construct_prediction_matrix():
     global co_sim_matrix
     global prediction_matrix
     # co_sim_matrix is of same size like matrix_df
-    prediction_matrix = pd.DataFrame(np.zeros((len(matrix_df), len(matrix_df.iloc[0]))))
+    prediction_matrix = pd.DataFrame(np.ones((len(matrix_df), len(matrix_df.iloc[0]))))
     for i in range(len(prediction_matrix)):
         for j in range(len(prediction_matrix.iloc[0])):
-            if matrix_df[j][i] != 0:
-                prediction_matrix[j][i] = matrix_df[j][i]
-            else:
-                prediction_matrix[j][i] = calc_weighted_score(j)
+            # if matrix_df[j][i] != 1:
+            #     prediction_matrix[j][i] = matrix_df[j][i]
+            # else:
+            #     prediction_matrix[j][i] = calc_weighted_score(j)
+            prediction_matrix[j][i] = calc_weighted_score(j)
 
 def construct_all_matrices():
     if len(matrix_df) >= 1:
@@ -170,6 +171,13 @@ def update_prediction_and_cos_matrices():
 def matrices_handler_thread():
     global matrix_df
     global last_updated
+    # while(True):
+    #     offers_amount = Offer.objects.all().count()
+    #     users_amount = User.objects.all().count()
+    #     if offers_amount >= 2 and users_amount >= 2:
+    #         break
+    #     sleep(5)
+
     matrix_df = init_matrix()
     last_updated = timezone.now()
     user_offer_update_thread = threading.Thread(target=update_user_offer_matrix, name='user_offer_update_thread', daemon=True)
