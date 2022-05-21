@@ -12,6 +12,10 @@ matrix_df = pd.DataFrame()
 last_updated = 0
 s = set() # this set contains tuples of (user , offer) meaning the user already bidded on offer
 
+bid_bonus = 5
+fav_bonus = 3
+viewed_bonus = 0
+
 co_sim_matrix = []
 prediction_matrix = pd.DataFrame()
 
@@ -26,7 +30,7 @@ def init_matrix():
         bidder_id = bid.bidder.id - 1
         offer_id = bid.offer.id - 1
         if (bidder_id,offer_id) not in s:
-            matrix[bidder_id][offer_id] += 3.0
+            matrix[bidder_id][offer_id] += bid_bonus
             s.add((bidder_id,offer_id))
 
     # need to update matrix every time a user adds something to favourites!!
@@ -36,7 +40,7 @@ def init_matrix():
         user_id = user.id - 1
         for fav_offer in fav_offers:
             fav_offer_id = fav_offer.id - 1
-            matrix[user_id][fav_offer_id] += 3.0
+            matrix[user_id][fav_offer_id] += fav_bonus
 
     matrix_df = pd.DataFrame(matrix)
     return matrix_df
@@ -56,29 +60,42 @@ def add_bids(new_bids):
         bidder_id = bid.bidder.id - 1
         offer_id = bid.offer.id - 1
         if (bidder_id,offer_id) not in s:
-            matrix_df[offer_id][bidder_id] += 3.0 #first [] should hold COLUMN INDEX and second ROW INDEX
+            matrix_df[offer_id][bidder_id] += bid_bonus #first [] should hold COLUMN INDEX and second ROW INDEX
             s.add((bidder_id,offer_id))
 
+def update_users_offers_bids_in_matrix():
+    global last_updated
+    new_users = User.objects.filter(date_joined__gte=last_updated)
+    new_offers = Offer.objects.filter(created__gte=last_updated)
+    new_bids = Bid.objects.filter(created__gte=last_updated)
+    
+    add_offer_columns_to_matrix_df(new_users)
+    add_user_rows_to_matrix_df(new_offers)
+    add_bids(new_bids)
+
+    last_updated = timezone.now()
+
+def add_or_remove_from_fav(user_id,offer_id,is_add):
+    global matrix_df
+    user_index = user_id - 1
+    offer_index = offer_id - 1
+    update_users_offers_bids_in_matrix()
+    try:
+        if is_add:
+            matrix_df[offer_index][user_index] += fav_bonus
+        else:
+            matrix_df[offer_index][user_index] -= fav_bonus
+    except:
+        pass
 
 
 def update_user_offer_matrix():
     # while true
     # filters offers, users, and bids made after a certain date
-    global matrix_df
-    global last_updated
     while True:
-        #print(matrix_df)
-        new_users = User.objects.filter(date_joined__gte=last_updated)
-        new_offers = Offer.objects.filter(created__gte=last_updated)
-        new_bids = Bid.objects.filter(created__gte=last_updated)
-        
-        add_offer_columns_to_matrix_df(new_users)
-        add_user_rows_to_matrix_df(new_offers)
-        add_bids(new_bids)
-
-        last_updated = timezone.now()
-        #print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
-        sleep(10)
+        print(matrix_df)
+        update_users_offers_bids_in_matrix()
+        sleep(5)
 
 # def naiv_update_user_offer_matrix():
 #     #working
@@ -101,6 +118,7 @@ def construct_cos_similar_matrix(): #this can probably be done more efficiently
         for j in range(len(matrix_df)):
             co_sim_matrix[j][i] = 1 - spatial.distance.cosine(matrix_df.iloc[i].tolist(), matrix_df.iloc[j].tolist())
 
+    #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
     return co_sim_matrix
 
 def calc_weighted_score(j):

@@ -6,7 +6,7 @@ from .models import User
 from offer.models import Category, Offer
 from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
-
+from recommendation_system.update_score_matrix import add_or_remove_from_fav
 
 def login_page(request):
     page = 'users-login'
@@ -106,8 +106,10 @@ def favorite_add(request, id):
     post = get_object_or_404(Offer, id=id)
     if post.favorites.filter(id=request.user.id).exists():
         post.favorites.remove(request.user)
+        add_or_remove_from_fav(request.user.id ,post.id , False)
     else:
         post.favorites.add(request.user)
+        add_or_remove_from_fav(request.user.id ,post.id , True)
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @ login_required
