@@ -113,7 +113,7 @@ def get_recommanded_offers_ids(user_id):
     i = 1
     # print(prediction_matrix)
     # print(prediction_matrix.iloc[index].values.tolist())
-    for value in prediction_matrix.iloc[index].values:
+    for value in prediction_matrix.iloc[index][1:].values:
         if value not in dic:
             dic[value] = [i]
         else:

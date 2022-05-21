@@ -88,6 +88,9 @@ def update_user_offer_matrix():
     # while true
     # filters offers, users, and bids made after a certain date
     while True:
+        print()
+        print(matrix_df)
+        print()
         update_users_offers_bids_in_matrix()
         sleep(5)
 
