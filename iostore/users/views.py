@@ -6,6 +6,7 @@ from .models import User
 from offer.models import Category, Offer
 from .forms import my_user_creation_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 def login_page(request):
@@ -74,13 +75,17 @@ def update_profile(request):
 def profile_page(request, pk):
     categories = Category.objects.all()
     all_offers_count = 0
-    temp = Offer.objects.all().order_by('-created')
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
-        .order_by('final_bid__time_of_delivery')
-    offers = []
-    for offer in temp:
-        if offer.host.username == pk:
-            offers.append(offer)
+                                            .filter(final_bid__time_of_delivery__gt=timezone.now())\
+                                            .order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
+                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
+                                        ,reviewed_by_host=False).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
+                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
+                                        ,reviewed_by_bidder=False).order_by('final_bid__time_of_delivery')     
+    
+    offers = Offer.objects.filter(host__username = pk).order_by('-created')
 
     bids_per_offer = {}
     for offer in offers:
@@ -98,7 +103,8 @@ def profile_page(request, pk):
     user = User.objects.get(username=pk)
     context = {'user': user, 'category_to_count': category_to_count,
                'all_offers_count': all_offers_count, 'offers': offers,
-               'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received}
+               'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received,
+               'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received, 'offers_to_be_reviewed_by_host':offers_to_be_reviewed_by_host, 'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder}
     return render(request, 'users/profile.html', context)
 
 @ login_required
@@ -113,7 +119,15 @@ def favorite_add(request, id):
 @ login_required
 def favorite_list(request):
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
-        .order_by('final_bid__time_of_delivery')
+                                            .filter(final_bid__time_of_delivery__gt=timezone.now())\
+                                            .order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
+                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
+                                        ,reviewed_by_host=False).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
+                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
+                                        ,reviewed_by_bidder=False).order_by('final_bid__time_of_delivery')     
+    
     offers = Offer.objects.filter(favorites=request.user).order_by('-created')
     categories = Category.objects.all()
     all_offers_count = 0
@@ -130,4 +144,7 @@ def favorite_list(request):
         offer_count += 1
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
-    return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,'all_offers_count': all_offers_count})
+    return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,
+    'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,
+    'all_offers_count': all_offers_count, 'offers_to_be_reviewed_by_host': offers_to_be_reviewed_by_host,
+    'offers_to_be_reviewed_by_bidder': offers_to_be_reviewed_by_bidder})
