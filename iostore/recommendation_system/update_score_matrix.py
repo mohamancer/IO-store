@@ -43,6 +43,7 @@ def init_matrix():
             matrix[user_id][fav_offer_id] += fav_bonus
 
     matrix_df = pd.DataFrame(matrix)
+    last_updated = timezone.now()
     return matrix_df
 
 def add_offer_columns_to_matrix_df(new_offers):
@@ -93,7 +94,9 @@ def update_user_offer_matrix():
     # while true
     # filters offers, users, and bids made after a certain date
     while True:
+        print()
         print(matrix_df)
+        print()
         update_users_offers_bids_in_matrix()
         sleep(5)
 
@@ -121,7 +124,27 @@ def construct_cos_similar_matrix(): #this can probably be done more efficiently
     #co_sim_matrix = sklearn.metrics.pairwise.cosine_similarity(matrix_df)
     return co_sim_matrix
 
-def calc_weighted_score(j):
+# def calc_weighted_score(j):
+#     global co_sim_matrix
+#     global matrix_df
+#     global prediction_matrix
+#     # j is the offer
+#     # i is the user
+#     numerator = 0.0
+#     denominator = 0.0
+#     for i in range(len(co_sim_matrix)): # go over all people
+#         if matrix_df[j][i] != 0:
+#             numerator += co_sim_matrix[j][i] * matrix_df[j][i]
+#             denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
+#             # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
+#         numerator -= co_sim_matrix[j][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
+        
+#     if denominator != 0:
+#         return (numerator / denominator)
+#     else: # if there are no users who rated this offer, deominator will be 0
+#         return 0
+
+def calc_weighted_score(user,offer):
     global co_sim_matrix
     global matrix_df
     global prediction_matrix
@@ -130,11 +153,11 @@ def calc_weighted_score(j):
     numerator = 0.0
     denominator = 0.0
     for i in range(len(co_sim_matrix)): # go over all people
-        if matrix_df[j][i] != 0:
-            numerator += co_sim_matrix[j][i] * matrix_df[j][i]
-            denominator += co_sim_matrix[j][i] # this might have to go inside the if!!!!
+        if matrix_df[offer][i] != 0:
+            numerator += co_sim_matrix[user][i] * matrix_df[offer][i]
+            denominator += co_sim_matrix[user][i] # this might have to go inside the if!!!!
             # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
-        numerator -= co_sim_matrix[j][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
+        numerator -= co_sim_matrix[user][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
         
     if denominator != 0:
         return (numerator / denominator)
@@ -153,7 +176,7 @@ def construct_prediction_matrix():
             #     prediction_matrix[j][i] = matrix_df[j][i]
             # else:
             #     prediction_matrix[j][i] = calc_weighted_score(j)
-            prediction_matrix[j][i] = calc_weighted_score(j)
+            prediction_matrix[j][i] = calc_weighted_score(i,j)
 
 def construct_all_matrices():
     if len(matrix_df) >= 1:
@@ -165,7 +188,7 @@ def construct_all_matrices():
 def update_prediction_and_cos_matrices():
     while True:
         construct_all_matrices()
-        sleep(20)
+        sleep(1)
 
 
 def matrices_handler_thread():
