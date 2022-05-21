@@ -78,7 +78,7 @@ def update_user_offer_matrix():
 
         last_updated = timezone.now()
         #print(get_highest_rated_offers(matrix_df.iloc[2],matrix_df))
-        sleep(120)
+        sleep(10)
 
 # def naiv_update_user_offer_matrix():
 #     #working
