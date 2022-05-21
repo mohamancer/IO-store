@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-
+{% load mul %}
 {% block content %}
 <main class="profile-page layout layout--3">
   <div class="container">
@@ -24,15 +24,44 @@
           <h3>{{user.username}}</h3>
         </div>
         <div class="profile__about">
+          <h3>Rating</h3>
+          <p>
+          <p> Delivery rating:</p> 
+            <div class="star-ratings-css">
+              
+              <div class="star-ratings-css-top" style="width: {{user.delivery_rating|mul:20}}%">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <div class="star-ratings-css-bottom">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+            </div>
+            {% if user.delivery_number_of_reviews == 1%}
+              {{user.delivery_number_of_reviews}} rating
+            {%else%}
+              {{user.delivery_number_of_reviews}} ratings
+            {%endif%}
+          
+          <p> Receiving rating: </p>
+            <div class="star-ratings-css">
+              <div class="star-ratings-css-top" style="width: {{user.receiving_rating|mul:20}}%">
+                  <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <div class="star-ratings-css-bottom">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+            </div>
+            {% if user.receiving_number_of_reviews == 1%}
+              {{user.receiving_number_of_reviews}} rating
+            {%else%}
+              {{user.receiving_number_of_reviews}} ratings
+            {%endif%}
+          </p>
+        </div>
+        <div class="profile__about">
           <h3>About</h3>
           <p>
             {{user.bio}}
-          </p>
-          <p>
-            Delivery rating is {{user.delivery_rating}} out of {{user.delivery_number_of_reviews}} ratings
-          </p>
-          <p>
-            Receiving rating is {{user.receiving_rating}} out of {{user.receiving_number_of_reviews}} ratings
           </p>
         </div>
       </div>
