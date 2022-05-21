@@ -138,8 +138,9 @@ def construct_prediction_matrix():
                 prediction_matrix[j][i] = calc_weighted_score(j)
 
 def construct_all_matrices():
-    construct_cos_similar_matrix()
-    construct_prediction_matrix()
+    if len(matrix_df) >= 1:
+        construct_cos_similar_matrix()
+        construct_prediction_matrix()
 
     #print(prediction_matrix)
 
