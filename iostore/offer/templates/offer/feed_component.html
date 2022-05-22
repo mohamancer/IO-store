@@ -1,21 +1,28 @@
 {% for offer in offers %}
 <div class="roomListRoom">
-    <div class="roomListRoom__header">
-        <a href="{% url 'users-profile' offer.host.username %}" class="roomListRoom__author">
-            <div class="avatar avatar--medium">
-                <img src="{{offer.host.avatar.url}}" />
-            </div>
-            <span>{{offer.host.username}}</span>
-        </a>  
-        <div class="roomListRoom__actions">
-            {%load split%}
-            <span>{{offer.created|timesince|split}} ago</span>
+    <div style='position: relative;'>
+        <div class="roomListRoom__header">
+            <a href="{% url 'users-profile' offer.host.username %}" class="roomListRoom__author">
+                <div class="avatar avatar--medium">
+                    <img src="{{offer.host.avatar.url}}" />
+                </div>
+                <span>{{offer.host.username}}</span>
+            </a>  
+        </div>
+        
+        <div class="roomListRoom__content">
+            <a href="{% url 'offer' offer.id %}">{{offer.title}}</a>
+            <p style='max-width: 385px;'> {{offer.description}} </p>
+        </div> 
+        <div class="feed__image">
+            {% if offer.post_image%}
+                <img src="{{offer.post_image.url}}" />
+            {% else %}
+                {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
+            {% endif %}
         </div>
     </div>
-    <div class="roomListRoom__content">
-        <a href="{% url 'offer' offer.id %}">{{offer.title}}</a>
-        <p> {{offer.description}} </p>
-    </div> 
+
     <div class="roomListRoom__meta">
         <a href="{% url 'offer' offer.id %}" class="roomListRoom__joined">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">

@@ -82,23 +82,35 @@
 
           <div class="room__header scroll">
             <div class="room__info">
-              <h3>{{offer.title}}</h3>
-              {% load split %}
-              <span>Posted {{offer.created|timesince|split}} ago</span>
-              
-            </div>
-            <div class="room__hosted">
-              <p>Offered By</p>
               <a href="{% url 'users-profile' offer.host.username %}" class="room__author">
-                <div class="avatar avatar--medium">
+                <div class="avatar avatar--big">
                   <img src="{{offer.host.avatar.url}}" />
                 </div>
-                <span>{{offer.host.username}}</span>
+                <span style="font-size: 20px;">{{offer.host.username}}</span>
               </a>
+              <h1>Active until {{offer.bidding_deadline}}</h1>
+              {% load split %}
+              <div style="margin-top: 15px;">
+                <span>Posted {{offer.created|timesince|split}} ago in</span>
+                <br>
+                <a href="{% url 'feed-home' %}?q={{offer.category.name}}" style="float: right;">
+                  <span class="room__topics">{{offer.category}}</span>
+                </a>
+              </div>
             </div>
-            <span class="room__topics">{{offer.category}}</span>
-            <h1>Active until {{offer.bidding_deadline}}</h1>
-            <p>{{offer.description}}</p>
+            <div class="room__hosted">
+              <h3>{{offer.title}}</h3>
+            </div>
+            <div class="room__hosted">
+              <p style="margin-top: 8px; max-width:550px;">{{offer.description}}</p>
+              <div class="offer__image">
+                {% if offer.post_image%}
+                  <img src="{{offer.post_image.url}}" />
+                {% else %}
+                  {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
+                {% endif %}
+              </div>
+            </div>
            
             
         </div> 

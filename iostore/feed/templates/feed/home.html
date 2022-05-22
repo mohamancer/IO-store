@@ -36,10 +36,24 @@
         </a>
 
         <div>
-          {% if offer_count == 1 %}
-          <h1>{{offer_count}} Offer Available</h1>
+          {% if flag == 0 %}
+            {% if offer_count == 1 %}
+            <h1>{{offer_count}} Offer Available</h1>
+            {% else %}
+            <h1>{{offer_count}} Offers Available</h1>
+            {% endif %}
+          {% elif flag == 1 %}
+            {% if offer_count == 1 %}
+            <h1>{{offer_count}} Recommendation Available</h1>
+            {% else %}
+            <h1>{{offer_count}} Recommendations Available</h1>
+            {% endif %}
           {% else %}
-          <h1>{{offer_count}} Offers Available</h1>
+            {% if offer_count == 1 %}
+            <h1>{{offer_count}} Favorite Available</h1>
+            {% else %}
+            <h1>{{offer_count}} Favorites Available</h1>
+            {% endif %}
           {% endif %}
         </div>
 

@@ -29,8 +29,9 @@ def home(request):
         if cnt != 0:
             category_to_count[c] = cnt
             all_offers_count += cnt
-
+    flag = 0
     if q.lower() == "recommended":
+        flag = 1
         user_id = request.user.id
         offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
         
@@ -44,7 +45,8 @@ def home(request):
             Q(active=True) &
             (Q(category__name__icontains=q) |
              Q(title__icontains=q) |
-             Q(description__icontains=q))
+             Q(description__icontains=q)|
+             Q(host__username__icontains=q))
         ).order_by('-created')
     
 
@@ -64,7 +66,7 @@ def home(request):
                'all_offers_count': all_offers_count, 'bids': bids,
                'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received,
                 'category_to_count': category_to_count, 'offers_to_be_reviewed_by_host':offers_to_be_reviewed_by_host,
-                'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder}
+                'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder, 'flag':flag}
     return render(request, 'feed/home.html', context)
 
 def review(request, pk):

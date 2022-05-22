@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="layout__body">
-        <form class="form" action="" method="POST">
+        <form class="form" action="" method="POST" enctype="multipart/form-data">
           {% csrf_token %}
           
           <div class="form__group">
@@ -43,6 +43,10 @@
                         value='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'/>
           </div>
 
+          <div class="form__group">
+            <label for="room_image">Image</label>
+            {{form.post_image}}
+          </div>
 
 
           <div class="form__action">

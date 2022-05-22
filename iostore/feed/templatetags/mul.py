@@ -9,8 +9,8 @@ def mul( value, arg ):
     Returns empty string on any error.
     '''
     try:
-        value = int( value )
-        arg = int( arg )
+        value = float( value )
+        arg = float( arg )
         if arg: return value * arg
     except: pass
     return ''
