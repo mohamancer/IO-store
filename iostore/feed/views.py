@@ -45,7 +45,8 @@ def home(request):
             Q(active=True) &
             (Q(category__name__icontains=q) |
              Q(title__icontains=q) |
-             Q(description__icontains=q))
+             Q(description__icontains=q)|
+             Q(host__username__icontains=q))
         ).order_by('-created')
     
 
