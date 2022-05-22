@@ -49,7 +49,8 @@ def createOffer(request):
             category=category,
             title=request.POST.get('title'),
             description=request.POST.get('description'),
-            bidding_deadline = bidding_deadline_tz
+            bidding_deadline = bidding_deadline_tz,
+            post_image = request.POST.get('post_image')
         )
         return redirect('feed-home')
 
@@ -73,6 +74,7 @@ def updateOffer(request, pk):
         offer.category = category
         offer.description = request.POST.get('description')
         offer.bidding_deadline = bidding_deadline_tz 
+        offer.post_image = request.POST.get('post_image')
         offer.save()
         return redirect('feed-home')
 

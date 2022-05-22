@@ -16,7 +16,7 @@ class Category(models.Model):
 class Offer(models.Model):
     title = models.CharField(max_length=25)
     description = models.TextField(max_length=200)
-    # post_image = models.ImageField(default='a.png',blank=True)
+    post_image = models.ImageField(null=True)
     final_bid = models.ForeignKey('Bid', on_delete=models.CASCADE,
                                   null=True, blank=True, related_name='final_bid')
     lowest_bid = models.FloatField(default=-1)
