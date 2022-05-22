@@ -44,7 +44,8 @@
                 No bids yet
             {% else %}
                 {% load dict_key %}
-                {{bids_per_offer|dict_key:offer.id}} bids, lowest bid is {{offer.lowest_bid}} NIS
+                {% load integer %}
+                {{bids_per_offer|dict_key:offer.id}} bids, lowest bid is {{offer.lowest_bid|integer}} NIS
             {% endif %}
         </a>
         <p class="roomListRoom__topic">{{offer.category.name}}</p>

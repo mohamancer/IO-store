@@ -4,10 +4,6 @@ register = template.Library()
 
 @register.filter
 def mul( value, arg ):
-    '''
-    Divides the value; argument is the divisor.
-    Returns empty string on any error.
-    '''
     try:
         value = float( value )
         arg = float( arg )

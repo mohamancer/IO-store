@@ -270,7 +270,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   height: 35px;
   position: relative;
-  width: 72%;
+  width: 20%;
 }
 
 ::-webkit-datetime-edit-day-field,

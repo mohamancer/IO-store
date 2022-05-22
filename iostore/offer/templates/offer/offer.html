@@ -160,8 +160,9 @@
                       {% endif %}
                   </div>
                   <div class="thread__details">
-                      {{bid.price}}
-                      <br>
+                      {% load integer %}
+                      <p style="font-size: 15px; "><b>{{bid.price|integer}}</b> NIS</p>
+                      
                       {{bid.time_of_delivery}}
                   </div>
                   </div>
@@ -201,8 +202,8 @@
                         {% endif %}
                     </div>
                     <div class="thread__details">
-                        {{bid.price}}
-                        <br>
+                        <p style="font-size: 15px; "><b>{{bid.price|integer}}</b> NIS</p>
+                        
                         {{bid.time_of_delivery}}
                     </div>
                   </div>
@@ -215,7 +216,7 @@
             
               <form action="" method="POST">
                   {% csrf_token %}
-                  <input name="price" placeholder="enter your price here..." type="number" required/>
+                  <input name="price" placeholder="enter your price here..." type="number" step="0.01"  required/>
                   <input name="time_of_delivery" type="datetime-local" 
                           max='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'
                           min='{% now "Y-m-d" %}T{% now "H:i" %}' required/>
