@@ -263,6 +263,16 @@ a {
   margin: -1.8rem;
 }
 
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  
+  margin: -0.75rem;
+  cursor: pointer;
+  height: 35px;
+  position: relative;
+  width: 72%;
+}
+
 ::-webkit-datetime-edit-day-field,
 ::-webkit-datetime-edit-month-field,
 ::-webkit-datetime-edit-year-field,

@@ -38,7 +38,7 @@
 
           <div class="form__group">
             <label for="room_deadline">Deadline</label>
-            <input name="bidding_deadline" type="datetime-local" 
+            <input required name="bidding_deadline" type="datetime-local" 
                         min='{% now "Y-m-d" %}T{% now "H:i" %}'
                         value='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'/>
           </div>
