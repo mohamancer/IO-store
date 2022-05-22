@@ -104,8 +104,11 @@
             <div class="room__hosted">
               <p style="margin-top: 8px; max-width:550px;">{{offer.description}}</p>
               <div class="offer__image">
-                <img src="{{offer.post_image.url}}" />
-                {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
+                {% if offer.post_image%}
+                  <img src="{{offer.post_image.url}}" />
+                {% else %}
+                  {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
+                {% endif %}
               </div>
             </div>
            

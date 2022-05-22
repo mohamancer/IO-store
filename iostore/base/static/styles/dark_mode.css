@@ -251,6 +251,17 @@ a {
   width: 20rem;
   height: 20rem;
 }
+.feed__image img {
+  position: absolute;
+  display: inline-block;
+  border-radius: 2rem;
+  border: 2px solid var(--color-main);
+  width: 19.5rem;
+  height: 14.5rem;
+  top: 0;
+  right: 0;
+  margin: -1.8rem;
+}
 
 ::-webkit-datetime-edit-day-field,
 ::-webkit-datetime-edit-month-field,
