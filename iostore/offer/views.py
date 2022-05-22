@@ -50,7 +50,7 @@ def createOffer(request):
             title=request.POST.get('title'),
             description=request.POST.get('description'),
             bidding_deadline = bidding_deadline_tz,
-            post_image = request.POST.get('post_image')
+            post_image = request.FILES.get('post_image')
         )
         return redirect('feed-home')
 
@@ -74,9 +74,10 @@ def updateOffer(request, pk):
         offer.category = category
         offer.description = request.POST.get('description')
         offer.bidding_deadline = bidding_deadline_tz 
-        offer.post_image = request.POST.get('post_image')
+        if request.FILES.get('post_image'):
+            offer.post_image = request.FILES.get('post_image')
         offer.save()
-        return redirect('feed-home')
+        return redirect('offer', pk=offer.id)
 
     context = {'form': form, 'categories': categories, 'offer': offer}
     return render(request, 'offer/offer_form.html', context)

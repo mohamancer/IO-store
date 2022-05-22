@@ -243,10 +243,13 @@ a {
   right: 3.5px;
 }
 
-.offer__image {
+.offer__image img {
   position: relative;
   display: inline-block;
-  border-radius: 50%;
+  border-radius: 30%;
+  border: 2px solid var(--color-main);
+  width: 20rem;
+  height: 20rem;
 }
 
 ::-webkit-datetime-edit-day-field,
@@ -1144,13 +1147,13 @@ input::-webkit-inner-spin-button {
 .room__hosted p {
   text-transform: uppercase;
   color: var(--color-gray);
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   line-height: 2;
 }
 
 .room__hosted h3 {
-  font-size: 2.4rem;
+  font-size: 3rem;
   font-weight: 500;
   color: var(--color-main);
 }

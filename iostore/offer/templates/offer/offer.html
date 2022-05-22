@@ -93,16 +93,19 @@
               <div style="margin-top: 15px;">
                 <span>Posted {{offer.created|timesince|split}} ago in</span>
                 <br>
-                <span style="float: right;" class="room__topics">{{offer.category}}</span>
+                <a href="{% url 'feed-home' %}?q={{offer.category.name}}" style="float: right;">
+                  <span class="room__topics">{{offer.category}}</span>
+                </a>
               </div>
             </div>
             <div class="room__hosted">
               <h3>{{offer.title}}</h3>
             </div>
             <div class="room__hosted">
-              <p style="margin-top: 8px; max-width:500px;">{{offer.description}}</p>
+              <p style="margin-top: 8px; max-width:550px;">{{offer.description}}</p>
               <div class="offer__image">
-                <img src="{{offer.post_image}}" />
+                <img src="{{offer.post_image.url}}" />
+                {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
               </div>
             </div>
            

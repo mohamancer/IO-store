@@ -124,6 +124,7 @@ def favorite_add(request, id):
 
 @ login_required
 def favorite_list(request):
+    flag = 2
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
                                             .order_by('final_bid__time_of_delivery')
@@ -150,7 +151,7 @@ def favorite_list(request):
         offer_count += 1
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
-    return render(request, 'users/favorites.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,
+    return render(request, 'feed/home.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,
     'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,
     'all_offers_count': all_offers_count, 'offers_to_be_reviewed_by_host': offers_to_be_reviewed_by_host,
-    'offers_to_be_reviewed_by_bidder': offers_to_be_reviewed_by_bidder})
+    'offers_to_be_reviewed_by_bidder': offers_to_be_reviewed_by_bidder, 'flag':flag})
