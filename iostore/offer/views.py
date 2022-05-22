@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 import pytz
 from .forms import OfferForm
 from .models import Offer, Category, Bid
+from recommendation_system.update_score_matrix import user_clicked_on_offer
 
 @login_required(login_url='users-login')
 def offer(request, pk):
@@ -16,6 +17,8 @@ def offer(request, pk):
     else:
         is_in_fav = False
     
+    user_clicked_on_offer(request.user.id,offer.id)
+
     if request.method == 'POST':
         time_of_delivery_tz = gettimezone(request.POST.get('time_of_delivery'))
         bid = Bid.objects.create(

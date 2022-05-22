@@ -6,18 +6,58 @@ from time import sleep
 import numpy as np
 import pandas as pd
 from scipy import spatial
+import pickle
 
-
-matrix_df = pd.DataFrame()
+matrix_df = pd.DataFrame() # this dataframe will hold user's love for an offer not including amount of clicks per offer
 last_updated = 0
 s = set() # this set contains tuples of (user , offer) meaning the user already bidded on offer
 
 bid_bonus = 5
 fav_bonus = 3
-viewed_bonus = 0
+clicks_bonus = 2
 
 co_sim_matrix = []
 prediction_matrix = pd.DataFrame()
+
+
+users_clicks = dict() # this is a dictionary mapping user to min(3,number of clicks on the post)
+
+users_clicks_file = 'users_clicks_file'
+
+
+def read_click_dict():
+    global users_clicks
+    try:
+        with open(users_clicks_file, 'rb') as f:
+            users_clicks = pickle.load(f)
+    except:
+        users_clicks = dict()
+
+def save_click_dict():
+    global users_clicks
+    if len(users_clicks)>=1:
+        with open(users_clicks_file, 'wb') as f:
+            pickle.dump(users_clicks, f)
+
+
+def user_clicked_on_offer(user_id,offer_id):
+    if (user_id,offer_id) in users_clicks:
+        users_clicks[(user_id,offer_id)] = min(users_clicks[(user_id,offer_id)]+1,clicks_bonus)
+    else:
+        users_clicks[(user_id,offer_id)] = 1
+
+def get_real_user_love_for_offer(user_id,offer_id):
+    love = matrix_df[offer_id][user_id]
+    if (user_id,offer_id) in users_clicks:
+        love += users_clicks[(user_id,offer_id)]
+    return love
+
+def print_real_love(): #just for testing, not really using this
+    love_matrix = np.ones((len(matrix_df),len(matrix_df.iloc[0])))
+    for i in range(len(matrix_df)):
+        for j in range(len(matrix_df.iloc[0])):
+            love_matrix[i][j] = get_real_user_love_for_offer(i,j)
+    print(pd.DataFrame(love_matrix))
 
 def init_matrix():
     global s
@@ -86,8 +126,9 @@ def add_or_remove_from_fav(user_id,offer_id,is_add):
 
 def update_user_offer_matrix():
     # while true
-    # filters offers, users, and bids made after a certain date
+    # filters offers, users, and bids made after a certain date, save user clicks dict into file
     while True:
+        save_click_dict()
         update_users_offers_bids_in_matrix()
         sleep(5)
 
@@ -114,8 +155,8 @@ def calc_weighted_score(user,offer):
     numerator = 0.0
     denominator = 0.0
     for i in range(1,len(co_sim_matrix)): # go over all users
-        if matrix_df[offer][i] != 0:
-            numerator += co_sim_matrix[user][i] * matrix_df[offer][i]
+        if matrix_df[offer][i] != 1:
+            numerator += co_sim_matrix[user][i] * get_real_user_love_for_offer(i,offer)
             denominator += co_sim_matrix[user][i] # this might have to go inside the if!!!!
             # im putting it outside because currently our "like function" is really dumb, taking into considration only if a offer was bidded or not.
         numerator -= co_sim_matrix[user][i]/5 # might have to delete this when i have a better like function, watch this: https://www.youtube.com/watch?v=Fmtorg_dmM0&ab_channel=ritvikmath
@@ -133,10 +174,6 @@ def construct_prediction_matrix():
     prediction_matrix = pd.DataFrame(np.ones((len(matrix_df), len(matrix_df.iloc[0]))))
     for i in range(1,len(prediction_matrix)):
         for j in range(1,len(prediction_matrix.iloc[0])):
-            # if matrix_df[j][i] != 1:
-            #     prediction_matrix[j][i] = matrix_df[j][i]
-            # else:
-            #     prediction_matrix[j][i] = calc_weighted_score(j)
             prediction_matrix[j][i] = calc_weighted_score(i,j)
 
 def construct_all_matrices():
@@ -153,7 +190,7 @@ def update_prediction_and_cos_matrices():
 def matrices_handler_thread():
     global matrix_df
     global last_updated
-
+    read_click_dict()
     matrix_df = init_matrix()
     last_updated = timezone.now()
     user_offer_update_thread = threading.Thread(target=update_user_offer_matrix, name='user_offer_update_thread', daemon=True)
