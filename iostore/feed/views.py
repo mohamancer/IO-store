@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from offer.models import Offer, Bid, Category
-
+import recommendation_system.calc_score
 
 def home(request):
     bids = Bid.objects.all().order_by('-created')[0:2]
@@ -29,8 +29,13 @@ def home(request):
         if cnt != 0:
             category_to_count[c] = cnt
             all_offers_count += cnt
-
-    if q in category_names:
+    flag = 0
+    if q.lower() == "recommended":
+        flag = 1
+        user_id = request.user.id
+        offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
+        
+    elif q in category_names:
         offers = Offer.objects.filter(
             Q(active=True) &
             Q(category__name__exact=q)
@@ -40,22 +45,28 @@ def home(request):
             Q(active=True) &
             (Q(category__name__icontains=q) |
              Q(title__icontains=q) |
-             Q(description__icontains=q))
+             Q(description__icontains=q)|
+             Q(host__username__icontains=q))
         ).order_by('-created')
+    
 
-    offer_count = offers.count()
+    if type(offers) == type([0]):
+        offer_count = len(offers)
+    else:
+        offer_count = offers.count()
 
     bids_per_offer = {}
     for offer in offers:
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
 
+
     context = {'offers': offers, 'categories': categories,
                'offer_count': offer_count, 'bids_per_offer': bids_per_offer,
                'all_offers_count': all_offers_count, 'bids': bids,
                'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received,
                 'category_to_count': category_to_count, 'offers_to_be_reviewed_by_host':offers_to_be_reviewed_by_host,
-                'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder}
+                'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder, 'flag':flag}
     return render(request, 'feed/home.html', context)
 
 def review(request, pk):

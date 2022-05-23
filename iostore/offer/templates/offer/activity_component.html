@@ -21,6 +21,15 @@
                             <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be delivered on {{offer.final_bid.time_of_delivery}}
                         </p>
+                        {% if offer.host.phone_number %}
+                        <p class="contact__right">
+                            Contact: {{offer.host.phone_number}}
+                        </p>
+                        {% else %}
+                        <p class="contact__right">
+                            Contact: {{offer.host.email}}
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
             {%endif%}
@@ -50,6 +59,15 @@
                             bid on your offer <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                             needs to be received on {{offer.final_bid.time_of_delivery}}
                         </p>
+                        {% if offer.final_bid.bidder.phone_number %}
+                        <p class="contact__right">
+                            Contact: {{offer.final_bid.bidder.phone_number}}
+                        </p>
+                        {% else %}
+                        <p class="contact__right">
+                            Contact: {{offer.final_bid.bidder.email}}
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
             {%endif%}
@@ -83,7 +101,7 @@
                                     <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
                                     <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
                                     <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-
+                                    <input type="radio" id="star0" name="rating" value="0" style="display:none;" checked />
                                 </fieldset>
                             </form>
                         </p>
@@ -115,7 +133,7 @@
                                 <input type="radio" id="star3" name="rating" value="3" /><label class = "full" for="star3" title="Meh - 3 stars"></label>
                                 <input type="radio" id="star2" name="rating" value="2" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>
                                 <input type="radio" id="star1" name="rating" value="1" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>
-
+                                <input type="radio" id="star0" name="rating" value="0" style="display:none;" checked />
                             </fieldset>
                         </form>
                     </p>

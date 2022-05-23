@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'offer',
     'users',
     'captcha',
+    'recommendation_system',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

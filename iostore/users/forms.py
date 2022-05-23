@@ -20,9 +20,10 @@ class my_user_creation_form(UserCreationForm):
 
 
 class update_user_form(ModelForm):
+
     class Meta:
         model = User
-        fields = ['email', 'phone_number', 'bio', 'avatar', 'is_dark_mode']
+        fields = ['email', 'phone_number', 'bio', 'avatar']
 
 class update_address_form(ModelForm):
     address = forms.CharField(max_length=250, required=True, widget = forms.HiddenInput())

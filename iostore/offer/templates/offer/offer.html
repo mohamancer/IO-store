@@ -82,25 +82,35 @@
 
           <div class="room__header scroll">
             <div class="room__info">
-              <h3>{{offer.title}}</h3>
-              {% load split %}
-              <span>Posted {{offer.created|timesince|split}} ago</span>
-              
-            </div>
-            <div class="room__hosted">
-              <p>Offered By</p>
               <a href="{% url 'users-profile' offer.host.username %}" class="room__author">
-                <div class="avatar avatar--medium">
+                <div class="avatar avatar--big">
                   <img src="{{offer.host.avatar.url}}" />
                 </div>
-                <span>{{offer.host.username}}</span>
+                <span style="font-size: 20px;">{{offer.host.username}}</span>
               </a>
+              <h1>Active until {{offer.bidding_deadline}}</h1>
+              {% load split %}
+              <div style="margin-top: 15px;">
+                <span>Posted {{offer.created|timesince|split}} ago in</span>
+                <br>
+                <a href="{% url 'feed-home' %}?q={{offer.category.name}}" style="float: right;">
+                  <span class="room__topics">{{offer.category}}</span>
+                </a>
+              </div>
             </div>
-            <span class="room__topics">{{offer.category}}</span>
-            <h1>Active until {{offer.bidding_deadline}}</h1>
-            <p>{{offer.description}}</p>
-            
-            
+            <div class="room__hosted">
+              <h3>{{offer.title}}</h3>
+            </div>
+            <div class="room__hosted">
+              <p style="margin-top: 8px; max-width:550px;">{{offer.description}}</p>
+              <div class="offer__image">
+                {% if offer.post_image%}
+                  <img src="{{offer.post_image.url}}" />
+                {% else %}
+                  {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
+                {% endif %}
+              </div>
+            </div>   
         </div> 
 
        </div>
@@ -148,8 +158,9 @@
                       {% endif %}
                   </div>
                   <div class="thread__details">
-                      {{bid.price}}
-                      <br>
+                      {% load integer %}
+                      <p style="font-size: 15px; "><b>{{bid.price|integer}}</b> NIS</p>
+                      
                       {{bid.time_of_delivery}}
                   </div>
                   </div>
@@ -189,8 +200,8 @@
                         {% endif %}
                     </div>
                     <div class="thread__details">
-                        {{bid.price}}
-                        <br>
+                        <p style="font-size: 15px; "><b>{{bid.price|integer}}</b> NIS</p>
+                        
                         {{bid.time_of_delivery}}
                     </div>
                   </div>
@@ -203,10 +214,10 @@
             
               <form action="" method="POST">
                   {% csrf_token %}
-                  <input name="price" placeholder="enter your price here..." type="number"/>
+                  <input name="price" placeholder="enter your price here..." type="number" step="0.01"  required/>
                   <input name="time_of_delivery" type="datetime-local" 
                           max='{{offer.bidding_deadline|date:'Y-m-d'}}T{{offer.bidding_deadline|time:'H:i'}}'
-                          min='{% now "Y-m-d" %}T{% now "H:i" %}'/>
+                          min='{% now "Y-m-d" %}T{% now "H:i" %}' required/>
                   {% if request.user == offer.host%}
                     <button class="btn btn--bid" id='btnbid' type="button" onclick='showAlert()'
                      title="You can't bid on your own offer">

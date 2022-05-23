@@ -12,3 +12,11 @@ autopep8
 
 # embedding google reCAPTCHA
 django-recaptcha
+
+numpy
+
+pandas
+
+scipy
+
+
