@@ -1,10 +1,12 @@
+from email.headerregistry import Address
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import User
 from offer.models import Category, Offer
-from .forms import my_user_creation_form, update_user_form, user_login_form
+from .forms import my_user_creation_form, update_address_form, update_user_form, user_login_form
 from django.contrib.auth.decorators import login_required
 
 from recommendation_system.update_score_matrix import add_or_remove_from_fav
@@ -113,7 +115,7 @@ def profile_page(request, pk):
     user = User.objects.get(username=pk)
     context = {'user': user, 'category_to_count': category_to_count,
                'all_offers_count': all_offers_count, 'offers': offers,
-               'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received,
+               'google_api_key': settings.GOOGLE_API_KEY,'bids_per_offer': bids_per_offer, 'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received,
                'offers_to_be_delivered_and_received': offers_to_be_delivered_and_received, 'offers_to_be_reviewed_by_host':offers_to_be_reviewed_by_host, 'offers_to_be_reviewed_by_bidder':offers_to_be_reviewed_by_bidder}
     return render(request, 'users/profile.html', context)
 
@@ -157,7 +159,25 @@ def favorite_list(request):
         offer_count += 1
         local_bids = offer.bid_set.all()
         bids_per_offer[offer.id] = len(local_bids)
-    return render(request, 'feed/home.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,
+        return render(request, 'feed/home.html', {'offer_count':offer_count,'offers_to_be_delivered_and_received':offers_to_be_delivered_and_received,
     'offers': offers, 'bids_per_offer': bids_per_offer, 'category_to_count':category_to_count,
     'all_offers_count': all_offers_count, 'offers_to_be_reviewed_by_host': offers_to_be_reviewed_by_host,
     'offers_to_be_reviewed_by_bidder': offers_to_be_reviewed_by_bidder, 'flag':flag})
+      
+@login_required(login_url='users-login')
+def update_address(request):
+    user = request.user
+    form = update_address_form(instance=user)
+    if request.method == 'POST':
+        form = update_address_form(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            user.have_address = True
+            user.save()
+            return redirect('users-profile', pk=user.username)
+
+    return render(request, 'users/update_address.html', {'form': form, 'google_api_key': settings.GOOGLE_API_KEY})
+
+  def map(request):
+    return render(request, 'users/map.html')
+
