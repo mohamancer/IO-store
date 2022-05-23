@@ -19,9 +19,10 @@ class my_user_creation_form(UserCreationForm):
 
 
 class update_user_form(ModelForm):
+
     class Meta:
         model = User
-        fields = ['email', 'phone_number', 'bio', 'avatar', 'is_dark_mode']
+        fields = ['email', 'phone_number', 'bio', 'avatar']
 
 
 class user_login_form(forms.Form):

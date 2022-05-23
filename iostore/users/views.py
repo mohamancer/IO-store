@@ -68,6 +68,12 @@ def update_profile(request):
     form = update_user_form(instance=user)
 
     if request.method == 'POST':
+        if request.POST.get('toggler'):
+            user.is_dark_mode = False
+        else:
+            user.is_dark_mode = True
+        user.save()
+            
         form = update_user_form(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
