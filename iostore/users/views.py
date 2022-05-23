@@ -98,7 +98,6 @@ def profile_page(request, pk):
             all_offers_count += cnt
 
     user = User.objects.get(username=pk)
-    print(user.longitude)
     context = {'user': user, 'category_to_count': category_to_count,
                'all_offers_count': all_offers_count, 'offers': offers,
                'google_api_key': settings.GOOGLE_API_KEY,
@@ -147,3 +146,6 @@ def update_address(request):
             return redirect('users-profile', pk=user.username)
 
     return render(request, 'users/update_address.html', {'form': form, 'google_api_key': settings.GOOGLE_API_KEY})
+
+def map(request):
+    return render(request, 'users/map.html')

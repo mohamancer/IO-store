@@ -40,10 +40,18 @@
         {% if user.address %}
         <div class="profile__about" id="user_address">
           <h3>Address</h3>
-          <div id="map"></div>
+          
           <p>
             {{user.address}}
+            <a href="#" onclick="document.getElementById('map').style.display = 'none';
+             document.getElementById('par1').innerHTML = 'Show Map'"> <p>Hide Map</p></a>
           </p>
+          
+          <div id="map" style="">{%include "users/map.html" %}</div>
+          <a href="#" onclick="document.getElementById('map').style.display = 'block';
+          document.getElementById('par1').innerHTML  = ''"><p id='par1'></p> </a>
+          
+          
         </div>
         {% endif %}
       </div>
