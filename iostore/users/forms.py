@@ -24,7 +24,7 @@ class update_user_form(ModelForm):
         model = User
         fields = ['email', 'phone_number', 'bio', 'avatar', 'is_dark_mode']
 
-class  update_address_form(ModelForm):
+class update_address_form(ModelForm):
     address = forms.CharField(max_length=250, required=True, widget = forms.HiddenInput())
     longitude = forms.CharField(max_length=50, required=True, widget = forms.HiddenInput())
     latitude = forms.CharField(max_length=50, required=True, widget = forms.HiddenInput())
