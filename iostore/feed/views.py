@@ -11,6 +11,22 @@ def home(request):
     google_api_key = settings.GOOGLE_API_KEY
     near_me_flag = False
     distance_filter = 50000
+    if not request.user.is_authenticated:
+        Offer.objects.all().update(distance_value = None, distance_text = '')
+    else:
+        offers = Offer.objects.filter(
+            Q(active=True))
+        user_location = (float(request.user.latitude), float(request.user.longitude))
+        gmaps = googlemaps.Client(key=google_api_key)
+        offers = Offer.objects.filter(active=True)
+        for offer in offers:
+            offer_location = (offer.latitude, offer.longitude)
+            distance_result = gmaps.distance_matrix(user_location, offer_location)
+            offer.distance_text = distance_result["rows"][0]["elements"][0]["distance"]["text"]
+            offer.distance_value = distance_result["rows"][0]["elements"][0]["distance"]["value"]
+            offer.save()
+
+
 
     bids = Bid.objects.all().order_by('-created')[0:2]
     offers = Offer.objects.all()
@@ -54,18 +70,8 @@ def home(request):
             Q(category__name__exact=q)
         ).order_by('-created')
     elif q=='near_me':
-        print(distance_filter)
         if not request.user.is_authenticated:
             return redirect('users-login')
-        user_location = (float(request.user.latitude), float(request.user.longitude))
-        gmaps = googlemaps.Client(key=google_api_key)
-        offers = Offer.objects.filter(active=True)
-        for offer in offers:
-            offer_location = (offer.latitude, offer.longitude)
-            distance_result = gmaps.distance_matrix(user_location, offer_location)
-            offer.distance_text = distance_result["rows"][0]["elements"][0]["distance"]["text"]
-            offer.distance_value = distance_result["rows"][0]["elements"][0]["distance"]["value"]
-            offer.save()
         offers = Offer.objects.filter(
             Q(active=True) &
             (Q(distance_value__lte = distance_filter))

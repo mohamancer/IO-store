@@ -47,7 +47,9 @@
                 {% load integer %}
                 {{bids_per_offer|dict_key:offer.id}} bids, lowest bid is {{offer.lowest_bid|integer}} NIS
             {% endif %}
+            {% if offer.distance_text %}
             <span><h4>Distance from you is {{offer.distance_text}}</h4></span>
+            {% endif %}
         </a>
         <p class="roomListRoom__topic">{{offer.category.name}}</p>
     </div>
