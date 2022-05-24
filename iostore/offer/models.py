@@ -30,6 +30,8 @@ class Offer(models.Model):
     address = models.CharField(verbose_name="Address",max_length=250, null=True, blank=True)
     longitude = models.CharField(verbose_name="Longitude",max_length=50, null=True, blank=True)
     latitude = models.CharField(verbose_name="Latitude",max_length=50, null=True, blank=True)
+    distance_value = models.FloatField(verbose_name="Distance_value",max_length=50, null=True, blank=True)
+    distance_text = models.CharField(verbose_name="Distance_text",max_length=50, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

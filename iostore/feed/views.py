@@ -1,13 +1,27 @@
+from django.conf import settings
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from offer.models import Offer, Bid, Category
 import recommendation_system.calc_score
+import requests, json, googlemaps
+
 
 def home(request):
+    google_api_key = settings.GOOGLE_API_KEY
+
     bids = Bid.objects.all().order_by('-created')[0:2]
     offers = Offer.objects.all()
     all_offers_count = 0
+
+    if(request.user.is_authenticated):
+        user_location = (float(request.user.latitude), float(request.user.longitude))
+        gmaps = googlemaps.Client(key=google_api_key)
+        for offer in offers:
+            offer_location = (offer.latitude, offer.longitude)
+            distance_result = gmaps.distance_matrix(user_location, offer_location)
+            offer.distance = distance_result["rows"][0]["elements"][0]["distance"]["text"]
+            
 
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
