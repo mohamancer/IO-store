@@ -71,7 +71,8 @@ const onPlaceChanged = () => {
 
 		//fade in the completed form
 		$('.hidden-el').fadeIn();
-
+		document.getElementById('par-address').innerHTML  = ''
+		document.getElementById('address-btn').innerHTML  = 'Update'
 	// 	$('#profile-btn').removeAttr('disabled');
 	// }
 	}

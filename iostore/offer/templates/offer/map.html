@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="googleMap" style="width:600px;height:400px;border-radius:0;left:0;"></div>
+{{ offer.longitude|json_script:"longitude" }}
+{{ offer.latitude|json_script:"latitude" }}
+{{ offer.host.username|json_script:"username"}}
+{{ offer.title|json_script:"title"}}
+
+<script>
+function myMap() {
+  var lng = JSON.parse(document.getElementById('longitude').textContent);
+  var lat = JSON.parse(document.getElementById('latitude').textContent);
+  var username = JSON.parse(document.getElementById('username').textContent);
+  var title = JSON.parse(document.getElementById('title').textContent);
+var mapProp= {
+
+  center: new google.maps.LatLng(lat, lng),
+  zoom:15,
+};
+var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+new google.maps.Marker({
+  position: new google.maps.LatLng(lat, lng),
+  map,
+  title: title,
+});
+
+}
+
+
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1qFiUzgevYDHPp4gOC_gvXS_4TWAkvN0&callback=myMap"></script>
+
+</body>
+</html>

@@ -27,6 +27,9 @@ class Offer(models.Model):
     bidding_deadline = models.DateTimeField(null=True)
     active = models.BooleanField(default=True)
     favorites = models.ManyToManyField(User, related_name='favorite', default=None, blank=True)
+    address = models.CharField(verbose_name="Address",max_length=250, null=True, blank=True)
+    longitude = models.CharField(verbose_name="Longitude",max_length=50, null=True, blank=True)
+    latitude = models.CharField(verbose_name="Latitude",max_length=50, null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
