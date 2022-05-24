@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="googleMap" style="width:850px;height:550px;margin-top:-14px;"></div>
+{{ request.user.longitude|json_script:"longitude" }}
+{{ request.user.latitude|json_script:"latitude" }}
+{{ request.user.username|json_script:"username"}}
+
+<script >
+    var currWindow =false; 
+function myMap() {
+  var lng = JSON.parse(document.getElementById('longitude').textContent);
+  var lat = JSON.parse(document.getElementById('latitude').textContent);
+  var username = JSON.parse(document.getElementById('username').textContent);
+
+var mapProp= {
+
+  center: new google.maps.LatLng(lat, lng),
+  zoom:13,
+};
+var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+new google.maps.Marker({
+  position: new google.maps.LatLng(lat, lng),
+  map: map,
+  title: username +"'s residence",
+  icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+});
+var infoWindowArray = new Array();
+{% for offer in offers%} 
+    var point = new google.maps.LatLng({{offer.latitude}},{{offer.longitude}}); 
+
+    var marker = new google.maps.Marker({
+        position: point,
+        map: map,
+        title: '{{offer.title}}',
+      });
+      var contentstring = "<h1><a href='{% url 'users-profile' offer.host.username %}'>{{offer.host.username}}</a>'s offer</h1><br>"+
+      "<div style='display:flex;max-width:400px'><div><p><a href='{% url 'offer' offer.id %}'>{{offer.title}}</a></p>"+
+      " {{offer.description}}</div>"+
+      "<div>{% if offer.post_image %}<img style='width:100px;height:100px;margin-left:10px;' src='media/{{offer.post_image}}'>{%endif%}</div></div>";
+      infowindow = new google.maps.InfoWindow({
+        content: contentstring
+    });
+        infoWindowArray['{{offer.title}}']=infowindow;
+
+      google.maps.event.addListener(marker, 'click', function() {
+        if( currWindow ) {
+            currWindow.close();
+         }
+        
+        currWindow = infoWindowArray[this.getTitle()]
+        infoWindowArray[this.getTitle()].open(map,this);
+        });
+
+      
+
+
+    
+{%endfor%} 
+ 
+}
+
+
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1qFiUzgevYDHPp4gOC_gvXS_4TWAkvN0&callback=myMap"></script>
+
+</body>
+</html>

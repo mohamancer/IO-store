@@ -80,7 +80,7 @@ def update_profile(request):
         form = update_user_form(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-            return redirect('users-profile')
+            return redirect('users-profile', pk=user.username)
 
     return render(request, 'users/update_profile.html', {'form': form})
 

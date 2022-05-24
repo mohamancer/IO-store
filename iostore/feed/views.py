@@ -30,13 +30,16 @@ def home(request):
             category_to_count[c] = cnt
             all_offers_count += cnt
     flag = 0
+
     if q.lower() == "recommended":
         if not request.user.is_authenticated:
             return redirect('users-login')
         flag = 1
         user_id = request.user.id
         offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
-        
+    elif q=='map':
+        flag=3 
+        offers = Offer.objects.filter(active=True)
     elif q in category_names:
         offers = Offer.objects.filter(
             Q(active=True) &
