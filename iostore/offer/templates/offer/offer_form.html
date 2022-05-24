@@ -58,4 +58,15 @@
     </div>
   </div>
 </main>
+<script>
+  document.getElementById('post_image-clear_id').remove()
+  function loop(){
+    labels = document.getElementsByTagName('label');
+    for( var i = 0; i < labels.length; i++ ) {
+        if (labels[i].htmlFor == 'post_image-clear_id')
+            labels[i].remove();
+    }
+  }
+  loop()
+</script>
 {% endblock content %}
