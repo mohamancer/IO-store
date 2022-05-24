@@ -21,7 +21,7 @@
         <div class="profile__info">
           {% if request.user == user %}
           <a href="{% url 'update-profile' %}" class="btn btn--main btn--pill">Edit Profile</a>
-          <a href="{% url 'update-address' %}" class="btn btn--main btn--pill">Add Address</a>
+          <a href="{% url 'update-address-user' user.username %}" class="btn btn--main btn--pill">Edit Address</a>
           {% endif %}
 
           <br/>
@@ -71,18 +71,14 @@
         {% if user.address %}
         <div class="profile__about" id="user_address">
           <h3>Address</h3>
-          
           <p>
             {{user.address}}
             <a href="#" onclick="document.getElementById('map').style.display = 'none';
              document.getElementById('par1').innerHTML = 'Show Map'"> <p>Hide Map</p></a>
           </p>
-          
           <div id="map" style="">{%include "users/map.html" %}</div>
           <a href="#" onclick="document.getElementById('map').style.display = 'block';
           document.getElementById('par1').innerHTML  = ''"><p id='par1'></p> </a>
-          
-          
         </div>
         {% endif %}
       </div>

@@ -39,19 +39,24 @@
 
               
             
-          {% if user.address%}
+          {% if flag%}
             <p id='par-address'>
-              Use old address?<br>
+              Use address from profile?<br>
               
               {{user.address}}</p>
+          {%else%}
+            <p id='par-address'>
+              Use prvious?<br>
+            
+            {{offer.address}}</p>
           {% endif %}
           <div class="form__action">
             <a class="btn btn--dark" href="{{request.META.HTTP_REFERER}}">Cancel</a>
             <button id='address-btn' class="btn btn--main" type="submit">
-              {% if user.address%}
-                Keep Old
+              {% if flag%}
+                From Profile
               {% else %}
-                Update
+                Previous
               {% endif %}
             </button>
            

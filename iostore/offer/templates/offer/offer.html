@@ -102,15 +102,22 @@
               <h3>{{offer.title}}</h3>
             </div>
             <div class="room__hosted">
-              <p style="margin-top: 8px; max-width:550px;">{{offer.description}}</p>
+              <div>
+              <p style="margin-top: 8px; max-width:550px;">{{offer.description}} </p>
+              
+              <div id="map" style="margin-top:20px">{% include "offer/map.html" %}</div>
+              </div>
               <div class="offer__image">
                 {% if offer.post_image%}
                   <img src="{{offer.post_image.url}}" />
                 {% else %}
                   {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
                 {% endif %}
+                
               </div>
-            </div>   
+              
+            </div>
+             
         </div> 
 
        </div>

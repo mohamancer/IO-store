@@ -1,9 +1,10 @@
 import datetime
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import pytz
-from .forms import OfferForm
+from .forms import OfferForm, update_address_form_offer
 from .models import Offer, Category, Bid
 from recommendation_system.update_score_matrix import user_clicked_on_offer
 
@@ -47,7 +48,7 @@ def createOffer(request):
         bidding_deadline_tz = gettimezone(request.POST.get('bidding_deadline'))
         category_name = request.POST.get('category')
         category = Category.objects.get(id=category_name)
-        Offer.objects.create(
+        offer = Offer.objects.create(
             host=request.user,
             category=category,
             title=request.POST.get('title'),
@@ -55,7 +56,8 @@ def createOffer(request):
             bidding_deadline = bidding_deadline_tz,
             post_image = request.FILES.get('post_image')
         )
-        return redirect('feed-home')
+
+        return redirect('create-address-offer', pk=offer.id)
 
     context = {'form': form, 'categories': categories}
     return render(request, 'offer/offer_form.html', context)
@@ -80,7 +82,7 @@ def updateOffer(request, pk):
         if request.FILES.get('post_image'):
             offer.post_image = request.FILES.get('post_image')
         offer.save()
-        return redirect('offer', pk=offer.id)
+        return redirect('update-address-offer', pk=offer.id)
 
     context = {'form': form, 'categories': categories, 'offer': offer}
     return render(request, 'offer/offer_form.html', context)
@@ -130,6 +132,41 @@ def acceptBid(request, pk):
         bid.offer.active = False
         bid.offer.save()
     return redirect('offer', pk=bid.offer.id)
+
+@login_required(login_url='users-login')
+def create_address_offer(request, pk):
+    flag = True
+    user = request.user
+    offer=Offer.objects.get(id=pk)
+    offer.address = user.address
+    offer.longitude = user.longitude
+    offer.latitude = user.latitude
+    offer.save()
+    form = update_address_form_offer(instance=offer)
+    if request.method == 'POST':
+        offer=Offer.objects.get(id=pk)
+        form = update_address_form_offer(request.POST, instance=offer)
+        if form.is_valid():
+            form.save()
+            offer.save()
+            return redirect('offer',pk=offer.id)
+    return render(request, 'offer/update_offer_address.html', {'flag':flag,'offer':offer,'form': form,
+                                                             'google_api_key': settings.GOOGLE_API_KEY})
+
+@login_required(login_url='users-login')
+def update_address_offer(request, pk):
+    flag = False
+    offer=Offer.objects.get(id=pk)
+    form = update_address_form_offer(instance=offer)
+    if request.method == 'POST':
+        offer=Offer.objects.get(id=pk)
+        form = update_address_form_offer(request.POST, instance=offer)
+        if form.is_valid():
+            form.save()
+            offer.save()
+            return redirect('offer',pk=offer.id)
+    return render(request, 'offer/update_offer_address.html', {'flag':flag,'offer':offer,'form': form,
+                                                             'google_api_key': settings.GOOGLE_API_KEY})
 
 def gettimezone(date_as_string):
     parsed_date = datetime.datetime.strptime(date_as_string, '%Y-%m-%dT%H:%M')
