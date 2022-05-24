@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from .models import Offer
 from django import forms
+from django.forms.widgets import FileInput
 
 class OfferForm(ModelForm):
     bidding_deadline = forms.DateTimeField(
@@ -11,6 +12,7 @@ class OfferForm(ModelForm):
                 'class': 'form-control'},
             format='%Y-%m-%dT%H:%M')
     )
+
     class Meta:
         model = Offer
         fields = '__all__'

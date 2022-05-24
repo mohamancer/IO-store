@@ -3,10 +3,12 @@
 
 <main class="layout layout--3">
   <div class="container">
-    {% include 'offer/categories_component.html' %}
-
-    <div class="roomList">
-      <div class="roomList__header">
+    {% if flag == 3 %}
+    {%else%}
+      {% include 'offer/categories_component.html' %}
+    {%endif%}
+    <div class="roomList" >
+      <div class="roomList__header" id='divr'>
 
         <a class="btn btn--main" href="{% url 'feed-home' %}?q=recommended">
           <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +50,7 @@
             {% else %}
             <h1>{{offer_count}} Recommendations Available</h1>
             {% endif %}
-          {% else %}
+          {% elif flag == 2 %}
             {% if offer_count == 1 %}
             <h1>{{offer_count}} Favorite Available</h1>
             {% else %}
@@ -73,8 +75,15 @@
           Create Offer
         </a>
       </div>
-
-      {% include 'offer/feed_component.html' %}
+      {% if flag == 3 %}
+        <script>
+          document.getElementById('divr').innerHTML  = ''
+        </script>
+        {% include "feed/map.html" %}
+      {%else%}
+        {% include 'offer/feed_component.html' %}
+      {%endif%}
+      
     </div>
 
     {% include 'offer/activity_component.html' %}

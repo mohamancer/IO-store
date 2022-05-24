@@ -5,7 +5,7 @@ $.getScript(
 	google.maps.event.addDomListener(window, 'load', initMap);
 });
 
-function initMap() {
+function pinitMa() {
     var user_address = user.address
     if (user_address) {
 
