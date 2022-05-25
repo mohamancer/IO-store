@@ -133,6 +133,9 @@ def get_recommanded_offers(user_id):
     best_match_ids = get_recommanded_offers_ids(user_id)
     offers = []
     for offer_id in best_match_ids:
-        offers.append(Offer.objects.get(id = offer_id))
+        try:
+            offers.append(Offer.objects.get(id = offer_id))
+        except:
+            pass
     offers = clean_inactive_users(offers)
     return offers

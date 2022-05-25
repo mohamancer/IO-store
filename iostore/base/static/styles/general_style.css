@@ -52,6 +52,8 @@
     width: 90%;
     margin: auto;
   }
+
+
   
   .btn {
     background-color: transparent;
@@ -270,6 +272,10 @@
   .scroll::-webkit-scrollbar-thumb {
     border-radius: 1rem;
     background-color: var(--color-gray);
+  }
+
+  .scroll::-webkit-scrollbar-corner {
+    display: none;
   }
   
   .container__fav {
@@ -869,7 +875,6 @@
     border-radius: 5px;
     overflow: hidden;
     margin: 0px auto;
-    margin-top: 10px;
   }
   
   .activities__header h2 {
