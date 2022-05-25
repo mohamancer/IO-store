@@ -59,7 +59,7 @@ def print_real_love(): #just for testing, not really using this
     for i in range(len(matrix_df)):
         for j in range(len(matrix_df.iloc[0])):
             love_matrix[i][j] = get_real_user_love_for_offer(i,j)
-    print(pd.DataFrame(love_matrix))
+
 
 def init_matrix():
     global s
@@ -71,7 +71,7 @@ def init_matrix():
     except:
         pickle.dump(amount_of_deleted_offers,open(amount_of_deleted_offers_file,'wb'))
         
-    print(amount_of_deleted_offers)
+
 
     offers_amount = Offer.objects.all().count() + amount_of_deleted_offers[0]
     users_amount = User.objects.all().count()
