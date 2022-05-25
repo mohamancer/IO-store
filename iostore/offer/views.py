@@ -82,7 +82,7 @@ def updateOffer(request, pk):
         if request.FILES.get('post_image'):
             offer.post_image = request.FILES.get('post_image')
         offer.save()
-        return redirect('update-address-offer', pk=offer.id)
+        return redirect('offer', pk=offer.id)
 
     context = {'form': form, 'categories': categories, 'offer': offer}
     return render(request, 'offer/offer_form.html', context)
@@ -135,7 +135,6 @@ def acceptBid(request, pk):
 
 @login_required(login_url='users-login')
 def create_address_offer(request, pk):
-    flag = True
     user = request.user
     offer=Offer.objects.get(id=pk)
     offer.address = user.address
@@ -150,23 +149,10 @@ def create_address_offer(request, pk):
             form.save()
             offer.save()
             return redirect('offer',pk=offer.id)
-    return render(request, 'offer/update_offer_address.html', {'flag':flag,'offer':offer,'form': form,
+    return render(request, 'offer/update_offer_address.html', {'offer':offer,'form': form,
                                                              'google_api_key': settings.GOOGLE_API_KEY})
 
-@login_required(login_url='users-login')
-def update_address_offer(request, pk):
-    flag = False
-    offer=Offer.objects.get(id=pk)
-    form = update_address_form_offer(instance=offer)
-    if request.method == 'POST':
-        offer=Offer.objects.get(id=pk)
-        form = update_address_form_offer(request.POST, instance=offer)
-        if form.is_valid():
-            form.save()
-            offer.save()
-            return redirect('offer',pk=offer.id)
-    return render(request, 'offer/update_offer_address.html', {'flag':flag,'offer':offer,'form': form,
-                                                             'google_api_key': settings.GOOGLE_API_KEY})
+
 
 def gettimezone(date_as_string):
     parsed_date = datetime.datetime.strptime(date_as_string, '%Y-%m-%dT%H:%M')
