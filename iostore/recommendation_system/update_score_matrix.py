@@ -21,8 +21,10 @@ prediction_matrix = pd.DataFrame()
 
 
 users_clicks = dict() # this is a dictionary mapping user to min(3,number of clicks on the post)
+amount_of_deleted_offers = [5]
 
-users_clicks_file = 'users_clicks_file'
+users_clicks_file = 'users_clicks_file.pkl'
+amount_of_deleted_offers_file = 'amount_of_deleted_offers_file.pkl'
 
 
 def read_click_dict():
@@ -62,7 +64,16 @@ def print_real_love(): #just for testing, not really using this
 def init_matrix():
     global s
     global matrix_df
-    offers_amount = Offer.objects.all().count()
+    amount_of_deleted_offers = [0]
+    try:
+        with open(amount_of_deleted_offers_file, 'rb') as f:
+            amount_of_deleted_offers = pickle.load(f)
+    except:
+        pickle.dump(amount_of_deleted_offers,open(amount_of_deleted_offers_file,'wb'))
+        
+    print(amount_of_deleted_offers)
+
+    offers_amount = Offer.objects.all().count() + amount_of_deleted_offers[0]
     users_amount = User.objects.all().count()
     matrix = np.ones((users_amount+1,offers_amount+1))
     bid_list = Bid.objects.all()

@@ -7,6 +7,8 @@ import pytz
 from .forms import OfferForm, update_address_form_offer
 from .models import Offer, Category, Bid
 from recommendation_system.update_score_matrix import user_clicked_on_offer
+import pickle
+amount_of_deleted_offers_file = 'amount_of_deleted_offers_file.pkl'
 
 @login_required(login_url='users-login')
 def offer(request, pk):
@@ -96,6 +98,10 @@ def deleteOffer(request, pk):
         return HttpResponse('Your are not allowed here!!')
 
     if request.method == 'POST':
+        amount_of_deleted_offers = [0]
+        with open(amount_of_deleted_offers_file, 'rb') as f:
+            amount_of_deleted_offers = pickle.load(f)
+        pickle.dump([amount_of_deleted_offers[0]+1],open(amount_of_deleted_offers_file,'wb'))
         offer.delete()
         return redirect('feed-home')
     return render(request, 'offer/delete.html', {'obj': offer})
