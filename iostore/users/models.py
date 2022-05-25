@@ -16,7 +16,7 @@ class User(AbstractUser):
     address = models.CharField(verbose_name="Address",max_length=250, null=True, blank=True)
     longitude = models.CharField(verbose_name="Longitude",max_length=50, null=True, blank=True)
     latitude = models.CharField(verbose_name="Latitude",max_length=50, null=True, blank=True)
-    have_address = models.BooleanField(default=False)
+    changed_address = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

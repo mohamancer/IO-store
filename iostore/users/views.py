@@ -173,7 +173,7 @@ def update_address_user(request, pk):
         form = update_address_form_user(request.POST, instance=user)
         if form.is_valid():
             form.save()
-            user.have_address = True
+            user.changed_address = True
             user.save()
             return redirect('users-profile', pk=user.username)
 

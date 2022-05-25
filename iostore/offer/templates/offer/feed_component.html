@@ -7,7 +7,9 @@
                     <img src="{{offer.host.avatar.url}}" />
                 </div>
                 <span>{{offer.host.username}}</span>
-            </a>  
+            </a>
+            {% load split %}
+            {{offer.created|timesince|split:1}} ago  
         </div>
         
         <div class="roomListRoom__content">

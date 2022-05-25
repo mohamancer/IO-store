@@ -4,9 +4,12 @@ register = template.Library()
 
 
 @register.filter(name='split')
-def split(value):
+def split(value,arg):
     a = value.split(",")
-    if len(a) > 0:
-        return a[0]
+    if arg==2:
+        return a[0]+ ', '+ a[1]
     else:
-        return value
+        if len(a) > 0:
+            return a[0]
+        else:
+            return value

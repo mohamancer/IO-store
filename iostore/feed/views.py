@@ -18,12 +18,17 @@ def home(request):
             Q(active=True))
         user_location = (float(request.user.latitude), float(request.user.longitude))
         gmaps = googlemaps.Client(key=google_api_key)
-        offers = Offer.objects.filter(active=True)
+        if (request.user.changed_address):
+            offers = Offer.objects.filter(active=True)
+        else:
+            offers = Offer.objects.filter(active=True, distance_value=None)
         for offer in offers:
             offer_location = (offer.latitude, offer.longitude)
             distance_result = gmaps.distance_matrix(user_location, offer_location)
             offer.distance_text = distance_result["rows"][0]["elements"][0]["distance"]["text"]
             offer.distance_value = distance_result["rows"][0]["elements"][0]["distance"]["value"]
+            request.user.changed_address=False
+            request.user.save()
             offer.save()
 
 

@@ -15,7 +15,8 @@
                 </path>
               </svg>
             </a>
-            <h3>Offer</h3>
+            {% load split %}
+            <h3>Offer ({{offer.address|split:2}})</h3>
           </div>
           {% if request.user.is_authenticated %}
             {% if offer.host == request.user %}
@@ -85,13 +86,14 @@
               <a href="{% url 'users-profile' offer.host.username %}" class="room__author">
                 <div class="avatar avatar--big">
                   <img src="{{offer.host.avatar.url}}" />
+                  
                 </div>
                 <span style="font-size: 20px;">{{offer.host.username}}</span>
               </a>
               <h1>Active until {{offer.bidding_deadline}}</h1>
               {% load split %}
               <div style="margin-top: 15px;">
-                <span>Posted {{offer.created|timesince|split}} ago in</span>
+                <span>Posted {{offer.created|timesince|split:1}} ago in</span>
                 <br>
                 <a href="{% url 'feed-home' %}?q={{offer.category.name}}" style="float: right;">
                   <span class="room__topics">{{offer.category}}</span>
@@ -114,7 +116,9 @@
                   {% comment %} <img src="{{offer.post_image.url|default_if_none:offer.category.image.url}}" /> {% endcomment %}
                 {% endif %}
                 
+                
               </div>
+              
               
             </div>
              
