@@ -3,6 +3,10 @@
 <body>
 
 <div id="googleMap" style="width:600px;height:400px;border-radius:0;left:0;"></div>
+{%if request.user != offer.host%}
+  {{ user.longitude|json_script:"userlng" }}
+  {{ user.latitude|json_script:"userlat" }}
+{%endif%}
 {{ offer.longitude|json_script:"longitude" }}
 {{ offer.latitude|json_script:"latitude" }}
 {{ offer.host.username|json_script:"username"}}
@@ -17,7 +21,7 @@ function myMap() {
 var mapProp= {
 
   center: new google.maps.LatLng(lat, lng),
-  zoom:15,
+  zoom:14,
 };
 var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
 
@@ -26,6 +30,17 @@ new google.maps.Marker({
   map,
   title: title,
 });
+
+if (document.getElementById('userlng')){
+  var userlng = JSON.parse(document.getElementById('userlng').textContent);
+  var userlat = JSON.parse(document.getElementById('userlat').textContent);
+  new google.maps.Marker({
+    position: new google.maps.LatLng(userlat, userlng),
+    map,
+    icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
+  });
+}
+
 
 }
 

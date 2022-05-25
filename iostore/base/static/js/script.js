@@ -33,5 +33,6 @@ function showAlert() {
 function setHeight(){
     var offsetHeight = document.getElementById('topics').parentElement.offsetHeight;
     document.getElementById('topics').style.height = offsetHeight+'px';
+    document.getElementById('wrapper').style.height = offsetHeight+'px';
   }
 setHeight()

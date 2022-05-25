@@ -62,6 +62,8 @@ def home(request):
         user_id = request.user.id
         offers = recommendation_system.calc_score.get_recommanded_offers(user_id)
     elif q=='map':
+        if not request.user.is_authenticated:
+            return redirect('users-login')
         flag=3 
         offers = Offer.objects.filter(active=True)
     elif q in category_names:
