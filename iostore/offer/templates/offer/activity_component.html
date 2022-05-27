@@ -20,7 +20,7 @@
                 <h2>Offers to be delivered</h2>
             </div>
             {% for offer in offers_to_be_delivered_and_received %}
-                {%if request.user == offer.final_bid.bidder%}
+                {%if request.user == offer.final_bid.bidder and not offer.final_bid.delivered%}
                     <div class="activities__box">
                         <div class="activities__boxHeader roomListRoom__header">
                             <a href="{% url 'users-profile' offer.host.username %}" class="roomListRoom__author">
@@ -29,7 +29,14 @@
                                 </div> 
                                 <p>{{offer.host.username}}'s Offer</p>    
                             </a>
-                                
+                            <form action="{% url 'change-time' offer.final_bid.id %}" method='POST' value="{{ request.path }}">
+                                {% csrf_token %}
+                                <button class="btn btn--review" type="submit" title='Delivered'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                </button> 
+                            </form>
                         </div>
                         <div class="activities__boxContent">
                             <p>
@@ -54,11 +61,11 @@
         </div>
         <div class="activities" style="margin-top:10px;">
             <div class="activities__header">
-                <h2>Offers to be recieved</h2>
+                <h2>Offers to be received</h2>
             </div>
             
             {% for offer in offers_to_be_delivered_and_received %}
-                {%if request.user == offer.host%}
+                {%if request.user == offer.host and not offer.final_bid.received %}
 
                     <div class="activities__box">
                         <div class="activities__boxHeader roomListRoom__header">
@@ -68,6 +75,14 @@
                                 </div> 
                                 <p>{{request.user.username}}</p>    
                             </a>
+                            <form action="{% url 'change-time' offer.final_bid.id %}" method='POST' value="{{ request.path }}">
+                                {% csrf_token %}
+                                <button class="btn btn--review" type="submit" title='Received' style=''>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                        <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+                                    </svg>
+                                </button> 
+                            </form>
                         </div>
                         <div class="activities__boxContent">
                             <p>
@@ -95,7 +110,7 @@
                 <h2>Offers to be reviewed</h2>
             </div>      
             {% for offer in offers_to_be_reviewed_by_host %}
-                {%if request.user == offer.host%}
+                {%if request.user == offer.host and offer.final_bid.received%}
                     <div class="activities__box">
                         <div class="activities__boxContent">
                             <p>
@@ -166,7 +181,7 @@
                 {%endif%}
             {% endfor %}
             {% for offer in offers_to_be_reviewed_by_bidder %}
-                {%if request.user == offer.final_bid.bidder%}
+                {%if request.user == offer.final_bid.bidder and offer.final_bid.delivered%}
                 <div class="activities__box">
                     <div class="activities__boxContent">
                         <p>

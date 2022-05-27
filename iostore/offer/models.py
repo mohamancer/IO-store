@@ -44,6 +44,8 @@ class Bid(models.Model):
     price = models.FloatField()
     time_of_delivery = models.DateTimeField()
     offer = models.ForeignKey(Offer, on_delete=models.CASCADE, null=True)
+    delivered= models.BooleanField(default=False)
+    received = models.BooleanField(default=False)
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
