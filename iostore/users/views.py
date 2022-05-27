@@ -90,12 +90,12 @@ def profile_page(request, pk):
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
                                             .order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(Q(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_host=False) | Q(final_bid__received=True)).order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(Q(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_bidder=False) | Q(final_bid__delivered=True)).order_by('final_bid__time_of_delivery')  
+    offers_to_be_reviewed_by_host = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_host=False)) |( Q(reviewed_by_host=False) & Q(final_bid__received=True))).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_bidder=False)) |( Q(reviewed_by_bidder=False) & Q(final_bid__delivered=True))).order_by('final_bid__time_of_delivery')  
 
 
     for offer in offers_to_be_reviewed_by_host:
@@ -145,12 +145,12 @@ def favorite_list(request):
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
                                             .order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(Q(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_host=False) | Q(final_bid__received=True)).order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(Q(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_bidder=False) | Q(final_bid__delivered=True)).order_by('final_bid__time_of_delivery')  
+    offers_to_be_reviewed_by_host = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_host=False)) |( Q(reviewed_by_host=False) & Q(final_bid__received=True))).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_bidder=False)) |( Q(reviewed_by_bidder=False) & Q(final_bid__delivered=True))).order_by('final_bid__time_of_delivery')  
 
 
     for offer in offers_to_be_reviewed_by_host:
