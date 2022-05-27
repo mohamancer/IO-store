@@ -12,5 +12,6 @@ urlpatterns = [
     path('delete-offer/<str:pk>/', views.deleteOffer, name="delete-offer"),
     path('delete-bid/<str:pk>/', views.deleteBid, name="delete-bid"),
     path('accept-bid/<str:pk>/', views.acceptBid, name="accept-bid"),
+    path('change-bid-time/<str:pk>/', views.changeBidTime, name="change-time"),
     path('create-address/<str:pk>/', views.create_address_offer, name="create-address-offer"),
 ]
