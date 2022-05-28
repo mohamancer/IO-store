@@ -1,5 +1,5 @@
-from email.headerregistry import Address
 from django.conf import settings
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib import messages
@@ -7,7 +7,6 @@ from django.contrib.auth import authenticate, login, logout
 from .models import User
 from offer.models import Category, Offer
 from .forms import my_user_creation_form, update_address_form_user, update_user_form, user_login_form
-from offer.forms import update_address_form_offer
 from django.contrib.auth.decorators import login_required
 
 from recommendation_system.update_score_matrix import add_or_remove_from_fav
@@ -91,13 +90,22 @@ def profile_page(request, pk):
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
                                             .order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_host=False).order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_bidder=False).order_by('final_bid__time_of_delivery')     
-    
+    offers_to_be_reviewed_by_host = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_host=False)) |( Q(reviewed_by_host=False) & Q(final_bid__received=True))).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_bidder=False)) |( Q(reviewed_by_bidder=False) & Q(final_bid__delivered=True))).order_by('final_bid__time_of_delivery')  
+
+
+    for offer in offers_to_be_reviewed_by_host:
+        offer.final_bid.received = True
+        offer.final_bid.save()
+        offer.save()
+    for offer in offers_to_be_reviewed_by_bidder:
+        offer.final_bid.delivered = True
+        offer.final_bid.save()
+        offer.save() 
     offers = Offer.objects.filter(host__username = pk).order_by('-created')
 
     bids_per_offer = {}
@@ -137,13 +145,22 @@ def favorite_list(request):
     offers_to_be_delivered_and_received = Offer.objects.filter(final_bid__isnull=False)\
                                             .filter(final_bid__time_of_delivery__gt=timezone.now())\
                                             .order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_host = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_host=False).order_by('final_bid__time_of_delivery')
-    offers_to_be_reviewed_by_bidder = Offer.objects.filter(final_bid__isnull=False)\
-                                        .filter(final_bid__time_of_delivery__lt=timezone.now()\
-                                        ,reviewed_by_bidder=False).order_by('final_bid__time_of_delivery')     
-    
+    offers_to_be_reviewed_by_host = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_host=False)) |( Q(reviewed_by_host=False) & Q(final_bid__received=True))).order_by('final_bid__time_of_delivery')
+    offers_to_be_reviewed_by_bidder = Offer.objects.filter((Q(final_bid__isnull=False) &
+                                        Q(final_bid__time_of_delivery__lt=timezone.now()) &
+                                        Q(reviewed_by_bidder=False)) |( Q(reviewed_by_bidder=False) & Q(final_bid__delivered=True))).order_by('final_bid__time_of_delivery')  
+
+
+    for offer in offers_to_be_reviewed_by_host:
+        offer.final_bid.received = True
+        offer.final_bid.save()
+        offer.save()
+    for offer in offers_to_be_reviewed_by_bidder:
+        offer.final_bid.delivered = True
+        offer.final_bid.save()
+        offer.save()
     offers = Offer.objects.filter(favorites=request.user).order_by('-created')
     categories = Category.objects.all()
     all_offers_count = 0

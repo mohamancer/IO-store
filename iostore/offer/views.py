@@ -8,6 +8,7 @@ from .forms import OfferForm, update_address_form_offer
 from .models import Offer, Category, Bid
 from recommendation_system.update_score_matrix import user_clicked_on_offer
 import pickle
+from django.utils import timezone
 amount_of_deleted_offers_file = 'amount_of_deleted_offers_file.pkl'
 
 @login_required(login_url='users-login')
@@ -159,6 +160,16 @@ def create_address_offer(request, pk):
                                                              'google_api_key': settings.GOOGLE_API_KEY})
 
 
+def changeBidTime(request, pk):
+    bid = Bid.objects.get(id=pk)
+    if request.method == 'POST':
+        next = request.POST.get('next', '/')
+        if request.user == bid.bidder:
+            bid.delivered = True
+        else:
+            bid.received = True
+        bid.save()
+    return redirect(next)
 
 def gettimezone(date_as_string):
     parsed_date = datetime.datetime.strptime(date_as_string, '%Y-%m-%dT%H:%M')
