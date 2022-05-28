@@ -44,6 +44,10 @@
                                 <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                                 needs to be delivered on {{offer.final_bid.time_of_delivery}}
                             </p>
+                            <p>
+                                <a target="_blank" href='https://www.google.com/maps/dir/?api=1&origin=
+                                {{request.user.latitude}},{{request.user.longitude}}&destination={{offer.latitude}},{{offer.longitude}}'>Directions</a>
+                            </p>
                             {% if offer.host.phone_number %}
                             <p class="contact__right">
                                 Contact: {{offer.host.phone_number}}
