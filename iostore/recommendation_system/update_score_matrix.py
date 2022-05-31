@@ -125,7 +125,10 @@ def update_users_offers_bids_in_matrix():
 
 def add_or_remove_from_fav(user_id,offer_id,is_add):
     global matrix_df
-    update_users_offers_bids_in_matrix()
+    try:
+        update_users_offers_bids_in_matrix()
+    except:
+        return
     try:
         if is_add:
             matrix_df[offer_id][user_id] += fav_bonus
