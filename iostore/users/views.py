@@ -133,10 +133,16 @@ def favorite_add(request, id):
     post = get_object_or_404(Offer, id=id)
     if post.favorites.filter(id=request.user.id).exists():
         post.favorites.remove(request.user)
-        add_or_remove_from_fav(request.user.id ,post.id , False)
+        try:
+            add_or_remove_from_fav(request.user.id ,post.id , False)
+        except:
+            pass
     else:
         post.favorites.add(request.user)
-        add_or_remove_from_fav(request.user.id ,post.id , True)
+        try:
+            add_or_remove_from_fav(request.user.id ,post.id , True)
+        except:
+            pass
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
 @ login_required
