@@ -6,6 +6,29 @@ if (dropdownButton) {
     dropdownMenu.classList.toggle("show");
   });
 }
+const dropdownMenu1 = document.querySelectorAll(".dropdown-menu1");
+const dropdownButton1 = document.querySelectorAll(".dropdown-button1");
+
+function handleClick(event) {
+  const main = event.target; // Use the event.target, the clicked element
+  let myContent = null; // The drop down contents of the clicked item, if found
+  dropdownMenu1.forEach( elem => {
+    // Kludge: using parentNode since the clicked element is in it's own div.
+    // It would probably be better if the querySelector above selected
+    // the li-element, and then remove paretNode from the next statement.
+    if ( main.parentNode.parentNode.contains(elem)) {
+      myContent = elem;
+    } else {
+      // Remove the class from every content except the clicked one.
+      elem.classList.remove('show');
+    }
+  });
+  // If the clicked have content, troggle if it is shown or not.
+  if (myContent) myContent.classList.toggle('show');
+}
+
+dropdownButton1.forEach( elem => elem.addEventListener("click",  handleClick));
+
 
 // Upload Image
 const photoInput = document.querySelector("#avatar");

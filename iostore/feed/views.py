@@ -3,8 +3,9 @@ from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from offer.models import Offer, Bid, Category
+from users.models import Rating
 import recommendation_system.calc_score
-import requests, json, googlemaps
+import googlemaps
 
 
 def home(request):
@@ -118,22 +119,53 @@ def review(request, pk):
     if request.method == 'POST':
         offer = Offer.objects.get(id=pk)
         current_rating = request.POST.get('rating')
+
         if offer.host == request.user:
             bidder = offer.final_bid.bidder
-            bidder.delivery_rating = (bidder.delivery_rating*bidder.delivery_number_of_reviews\
-                                     + float(current_rating))/(bidder.delivery_number_of_reviews +1)
+            if bidder.delivery_number_of_reviews==0:
+                bidder.delivery_rating = Rating.objects.create()
+
+            bidder.delivery_rating = calc_rating(request, pk)
+            print(bidder.delivery_rating)
             bidder.delivery_number_of_reviews += 1
             offer.reviewed_by_host = True
+
+            bidder.delivery_rating.save()
             bidder.save()
+
         else:
             host = offer.host
             host.receiving_rating = (host.receiving_rating*host.receiving_number_of_reviews\
                                      + float(current_rating))/(host.receiving_number_of_reviews +1)
+
             host.receiving_number_of_reviews += 1
             offer.reviewed_by_bidder = True
+
             host.save() 
-            
+        
         offer.save()
 
-
     return redirect('feed-home')
+
+def calc_rating(request, pk):
+    offer = Offer.objects.get(id=pk)
+    bidder = offer.final_bid.bidder
+
+    current_acc_rating = request.POST.get('rating1')
+    current_qulaity_rating = request.POST.get('rating2')
+    current_arrival_rating = request.POST.get('rating3')
+    current_cost_rating = request.POST.get('rating4')
+
+    bidder.delivery_rating.accuracy_rating = (bidder.delivery_rating.accuracy_rating*bidder.delivery_number_of_reviews\
+                            + float(current_acc_rating))/(bidder.delivery_number_of_reviews +1)
+    bidder.delivery_rating.quality_rating = (bidder.delivery_rating.quality_rating*bidder.delivery_number_of_reviews\
+                        + float(current_qulaity_rating))/(bidder.delivery_number_of_reviews +1)
+    bidder.delivery_rating.arrival_rating = (bidder.delivery_rating.arrival_rating*bidder.delivery_number_of_reviews\
+                        + float(current_arrival_rating))/(bidder.delivery_number_of_reviews +1)   
+    bidder.delivery_rating.cost_rating = (bidder.delivery_rating.cost_rating*bidder.delivery_number_of_reviews\
+                        + float(current_cost_rating))/(bidder.delivery_number_of_reviews +1)
+    bidder.delivery_rating.avg = (bidder.delivery_rating.accuracy_rating + bidder.delivery_rating.quality_rating\
+        + bidder.delivery_rating.arrival_rating + bidder.delivery_rating.cost_rating)/4 
+
+
+    return bidder.delivery_rating            
