@@ -8,5 +8,5 @@ def mul( value, arg ):
         value = float( value )
         arg = float( arg )
         if arg: return value * arg
-    except: pass
+    except: return 0
     return ''

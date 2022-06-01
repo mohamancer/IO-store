@@ -1,6 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
+class Rating(models.Model):
+    accuracy_rating = models.FloatField(default=0, blank=True)
+    quality_rating = models.FloatField(default=0, blank=True)
+    arrival_rating = models.FloatField(default=0, blank=True)
+    cost_rating = models.FloatField(default=0, blank=True)
+    avg = models.FloatField(default=0,blank=True)
+    def __str__(self):
+        return str([self.accuracy_rating,self.quality_rating,self.arrival_rating,self.cost_rating,self.avg])
+
 class User(AbstractUser):
     email = models.EmailField(unique=True)
     phone_number = models.CharField(
@@ -8,7 +18,7 @@ class User(AbstractUser):
     bio = models.TextField(blank=True)
     avatar = models.ImageField(
         default='avatar.svg', null=True, upload_to='images/users/')
-    delivery_rating = models.FloatField(default=0, blank=True)
+    delivery_rating = models.ForeignKey(Rating, on_delete=models.CASCADE, blank=True,null=True)
     delivery_number_of_reviews = models.IntegerField(default=0, blank=True)
     receiving_rating = models.FloatField(default=0, blank=True)
     receiving_number_of_reviews = models.IntegerField(default=0, blank=True)
@@ -20,3 +30,4 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
+

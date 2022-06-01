@@ -9,7 +9,6 @@ try: # this will fail if the data base is not initialized yet, should work in an
 except:
     pass
 
-#print(get_highest_rated_offers(tplist))
 
 
 urlpatterns = [

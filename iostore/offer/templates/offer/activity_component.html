@@ -123,24 +123,62 @@
                                 <a href="{% url 'users-profile' offer.final_bid.bidder.username %}">{{offer.final_bid.bidder.username}}'s</a>
                                 delivery on the offer <a href="{% url 'offer' offer.id %}">{{offer}}</a>
                                 
+
+                            </p>
+                             <button class="dropdown-button1"><b style='font-size:2rem;color:white;'>Rate</b>
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+                                    <title>chevron-down</title>
+                                    <path d="M16 21l-13-13h-3l16 16 16-16h-3l-13 13z"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu1">
                                 <form action="{% url 'review' offer.id %}" method='POST'>
                                     {% csrf_token %}
-                                    <fieldset class="rating">
-    
+                                    <p>Product Accuracy:</p>
+                                    <fieldset class="rating1">
+                                        <input type="radio" id="star{{offer.id}}15" name="rating1" value="5" /><label class = "full" for="star{{offer.id}}15" title="Awesome - 5 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}14" name="rating1" value="4" /><label class = "full" for="star{{offer.id}}14" title="Pretty good - 4 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}13" name="rating1" value="3" /><label class = "full" for="star{{offer.id}}13" title="Meh - 3 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}12" name="rating1" value="2" /><label class = "full" for="star{{offer.id}}12" title="Kinda bad - 2 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}11" name="rating1" value="1" /><label class = "full" for="star{{offer.id}}11" title="Sucks big time - 1 star"></label>
+                                        <input type="radio" id="star{{offer.id}}10" name="rating1" value="0" style="display:none;" checked />
+                                    </fieldset>
+                                    <p>Product Quality:</p>
+                                    <fieldset class="rating2">
+                                        <input type="radio" id="star{{offer.id}}25" name="rating2" value="5" /><label class = "full" for="star{{offer.id}}25" title="Awesome - 5 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}24" name="rating2" value="4" /><label class = "full" for="star{{offer.id}}24" title="Pretty good - 4 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}23" name="rating2" value="3" /><label class = "full" for="star{{offer.id}}23" title="Meh - 3 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}22" name="rating2" value="2" /><label class = "full" for="star{{offer.id}}22" title="Kinda bad - 2 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}21" name="rating2" value="1" /><label class = "full" for="star{{offer.id}}21" title="Sucks big time - 1 star"></label>
+                                        <input type="radio" id="star{{offer.id}}20" name="rating2" value="0" style="display:none;" checked />
+                                    </fieldset>
+                                    <p>Time of Arrival:</p>
+                                    <fieldset class="rating3">
+                                        <input type="radio" id="star{{offer.id}}35" name="rating3" value="5" /><label class = "full" for="star{{offer.id}}35" title="Awesome - 5 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}34" name="rating3" value="4" /><label class = "full" for="star{{offer.id}}34" title="Pretty good - 4 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}33" name="rating3" value="3" /><label class = "full" for="star{{offer.id}}33" title="Meh - 3 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}32" name="rating3" value="2" /><label class = "full" for="star{{offer.id}}32" title="Kinda bad - 2 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}31" name="rating3" value="1" /><label class = "full" for="star{{offer.id}}31" title="Sucks big time - 1 star"></label>
+                                        <input type="radio" id="star{{offer.id}}30" name="rating3" value="0" style="display:none;" checked />
+                                    </fieldset>
+                                    <p>Cost:</p>
+                                    <fieldset class="rating4">
                                         <button class="btn btn--review" type="submit" title='Check'>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
                                                 <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
                                             </svg>
                                         </button> 
-                                        <input type="radio" id="star{{offer.id}}5" name="rating" value="5" /><label class = "full" for="star{{offer.id}}5" title="Awesome - 5 stars"></label>
-                                        <input type="radio" id="star{{offer.id}}4" name="rating" value="4" /><label class = "full" for="star{{offer.id}}4" title="Pretty good - 4 stars"></label>
-                                        <input type="radio" id="star{{offer.id}}3" name="rating" value="3" /><label class = "full" for="star{{offer.id}}3" title="Meh - 3 stars"></label>
-                                        <input type="radio" id="star{{offer.id}}2" name="rating" value="2" /><label class = "full" for="star{{offer.id}}2" title="Kinda bad - 2 stars"></label>
-                                        <input type="radio" id="star{{offer.id}}1" name="rating" value="1" /><label class = "full" for="star{{offer.id}}1" title="Sucks big time - 1 star"></label>
-                                        <input type="radio" id="star{{offer.id}}0" name="rating" value="0" style="display:none;" checked />
+                                        <input type="radio" id="star{{offer.id}}45" name="rating4" value="5" /><label class = "full" for="star{{offer.id}}45" title="Awesome - 5 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}44" name="rating4" value="4" /><label class = "full" for="star{{offer.id}}44" title="Pretty good - 4 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}43" name="rating4" value="3" /><label class = "full" for="star{{offer.id}}43" title="Meh - 3 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}42" name="rating4" value="2" /><label class = "full" for="star{{offer.id}}42" title="Kinda bad - 2 stars"></label>
+                                        <input type="radio" id="star{{offer.id}}41" name="rating4" value="1" /><label class = "full" for="star{{offer.id}}41" title="Sucks big time - 1 star"></label>
+                                        <input type="radio" id="star{{offer.id}}40" name="rating4" value="0" style="display:none;" checked />
                                     </fieldset>
-                                </form>
-                            </p>
+                                </form>                                              
+                            </div>
+  
+
 
                         </div>
                     </div>
