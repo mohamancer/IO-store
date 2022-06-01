@@ -134,10 +134,13 @@ def review(request, pk):
         if offer.host == request.user:
             bidder = offer.final_bid.bidder
             if bidder.delivery_number_of_reviews==0:
+                
                 bidder.delivery_rating = Rating.objects.create()
+                bidder.save()
+            
 
             bidder.delivery_rating = calc_rating(request, pk)
-            print(bidder.delivery_rating)
+            
             bidder.delivery_number_of_reviews += 1
             offer.reviewed_by_host = True
 
