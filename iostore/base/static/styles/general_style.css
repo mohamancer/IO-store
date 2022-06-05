@@ -156,7 +156,7 @@
     position: relative;
     display: inline-block;
     border-radius: 50%;
-    border: 2px solid var(--color-main);
+    border: 2px solid var(--color-circle);
   }
   
   .avatar img {
@@ -262,7 +262,7 @@
   ::-webkit-datetime-edit-year-field,
   ::-webkit-datetime-edit-hour-field,
   ::-webkit-datetime-edit-ampm-field {
-    color: white;
+    color: var(--color-main-light);
   }
   
   .scroll::-webkit-scrollbar {
@@ -630,11 +630,6 @@
     }
   }
   
-  /*==============================
-  =>  Topics
-  ================================*/
-  .topics {
-  }
   .form__group {
     margin-bottom: 2rem;
     width: 100%;
@@ -720,7 +715,7 @@
   .topics__header h2 {
     text-transform: uppercase;
     font-weight: 500;
-    color: var(--color-dark-light);
+    color: var(--color-browse);
   }
   
   .topics__list {
@@ -949,6 +944,7 @@
   
   .activities__boxContent a {
     text-transform: capitalize;
+    color: var(--color-activity);
   }
   .activities__boxContent svg {
     width: 1.6rem;
@@ -1063,7 +1059,7 @@
   
   .profile__about h3 {
     text-transform: uppercase;
-    color: var(--color-dark-light);
+    color: var(--color-browse);
     margin-bottom: 0.5rem;
   }
   

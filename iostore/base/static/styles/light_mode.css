@@ -5,8 +5,8 @@
   --color-main: #8e3922;
   --color-main-light: #8e3922;
   --color-dark: #c0bea9;
-  --color-dark-medium: #c0bea9;
-  --color-dark-light: #76765b;
+  --color-dark-medium: #cfceba;
+  --color-dark-light: #adad8f;
   --color-light: #8e3922;
   --color-gray: #8b8b8b;
   --color-light-gray: #8e3922;
@@ -15,6 +15,9 @@
   --color-error: #fc4b0b;
   --color-search-bar: #ffffff;
   --color-navbar: #c0bea9;
+  --color-browse: #76765b;
+  --color-circle: #ffffff;
+  --color-activity: #76765b;
 }
 
 /*========== base styles ==========*/
