@@ -10,8 +10,6 @@ Pillow >= 9.1
 # Docs: https://pypi.org/project/autopep8/
 autopep8
 
-# embedding google reCAPTCHA
-django-recaptcha
 
 numpy
 

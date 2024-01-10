@@ -4,7 +4,7 @@ $.getScript(
 		google_api_key +
 		'&libraries=places&language=en'
 ).done(function (script, textStatus) {
-	google.maps.event.addDomListener(window, 'load', initAutoComplete);
+	window.addEventListener('load', initAutoComplete);
 });
 
 let autocomplete;
